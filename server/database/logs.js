@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const LogsConfiguration = {
 	// Model attributes are defined here
 	id: {
-		type: DataTypes.STRING,
+		type: DataTypes.INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true,

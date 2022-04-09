@@ -26,13 +26,13 @@ const connection = async () => {
 	try {
 		await sequelize.authenticate();
 		console.log("Connection has been established successfully.");
-		await sequelize.sync({ force: true });
-		console.log("Force Sync successful.");
+		// await sequelize.sync({ force: true });
+		// console.log("Force Sync successful.");
 		// sequelize.sync({ alter: true });
 		// sequelize.sync();
 	} catch (error) {
-		console.error("Unable to connect to the database:", error);
+		console.error("Unable to connect to the database:", error.message);
 	}
 };
 
-module.exports = { connection, User, Song, Playlist };
+module.exports = { connection, Logs };

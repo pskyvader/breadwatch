@@ -5,11 +5,9 @@ const cookieParser = require("cookie-parser");
 const pgSession = require("connect-pg-simple")(session);
 const { connection } = require("./database");
 
-const {getBread}=require("./api");
-
+const { getLogs, updateLogs, BREAD, CAKE, COOKIE } = require("./api");
 
 connection();
-
 
 const app = express();
 app.use(
@@ -39,14 +37,38 @@ app.use(express.static("client/build")); //Serves resources from public folder
 // serve up the index.html if express does'nt recognize the route
 const path = require("path");
 
-app.post("/bread/add", (req, res) => {
+app.get("/log/get/:date?", async (req, res) => {
+	const result = await getLogs(req.params.date || Date.now());
+	res.json(result);
+});
 
-	res.send(req.session.bread);
-}
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.get("/bread/add/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), BREAD, 1);
+	res.json(result);
+});
+app.get("/bread/remove/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), BREAD, -1);
+	res.json(result);
+});
+
+app.get("/cake/add/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), CAKE, 1);
+	res.json(result);
+});
+app.get("/cake/remove/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), CAKE, -1);
+	res.json(result);
+});
+
+app.get("/cookie/add/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), COOKIE, 1);
+	res.json(result);
+});
+app.get("/cookie/remove/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), COOKIE, -1);
+	res.json(result);
+});
 
 
 app.get("*", (req, res) => {
