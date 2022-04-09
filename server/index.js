@@ -42,7 +42,6 @@ app.get("/log/get/:date?", async (req, res) => {
 	res.json(result);
 });
 
-
 app.get("/bread/add/:date?", async (req, res) => {
 	const result = await updateLogs(req.params.date || Date.now(), BREAD, 1);
 	res.json(result);
@@ -70,8 +69,8 @@ app.get("/cookie/remove/:date?", async (req, res) => {
 	res.json(result);
 });
 
-
 app.get("*", (req, res) => {
+	console.log(req.params);
 	res.sendFile(
 		path.resolve(__dirname, "..", "client", "build", "index.html")
 	);

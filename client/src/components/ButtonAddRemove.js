@@ -4,15 +4,15 @@ const BREAD = "Bread";
 const CAKE = "Cake";
 const COOKIE = "Cookie";
 
-const ButtonAddRemove = ({ element }) => {
-	const [quantity, setQuantity] = useState(0);
+const ButtonAddRemove = ({ element, logs }) => {
+	const [quantity, setQuantity] = useState((logs && logs[element]) || 0);
+	console.log(element, logs);
 
 	return (
-		<div class="btn-group">
+		<div className="btn-group">
 			<div className="button-add">
 				<button
 					className="button-add__button"
-					oncrymp="add"
 					onClick={() => setQuantity(quantity + 1)}
 				>
 					<span className="button-add__icon">

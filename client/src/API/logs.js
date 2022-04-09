@@ -1,7 +1,7 @@
-import request from "./equest";
+import request from "./request";
 
 export const getLogs = (date = "") => {
-	const url = `/logs/get/${date}`;
+	const url = `/log/get/${date}`;
 	return request(url);
 };
 
