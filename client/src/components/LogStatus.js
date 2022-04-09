@@ -21,7 +21,7 @@ const LogStatus = ({ children }) => {
 
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
-			return cloneElement(child, { logs });
+			return cloneElement(child, { logs, setLogs });
 		}
 		return child;
 	});
