@@ -47,9 +47,7 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 const getLogs = async (date = Date.now()) => {
 	const logs = await Logs.findOne({
 		where: {
-			date: {
-				[Op.lte]: date,
-			},
+			date: date
 		},
 	});
 	if (logs === null) {
