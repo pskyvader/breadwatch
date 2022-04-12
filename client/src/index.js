@@ -3,7 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { initializeIcons } from "@fluentui/font-icons-mdl2";
 
+initializeIcons();
 // After
 const container = document.getElementById("root");
 const root = createRoot(container);

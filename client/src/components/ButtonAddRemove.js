@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { IIconProps, IContextualMenuProps, Stack, Link } from "@fluentui/react";
+import { IconButton } from "@fluentui/react/lib/Button";
+
 import {
 	addBread,
 	addCake,
@@ -11,6 +13,7 @@ import {
 const BREAD = "bread";
 const CAKE = "cake";
 const COOKIE = "cookie";
+
 
 const add = (element, setLogs) => {
 	if (element === BREAD) {
@@ -72,6 +75,11 @@ const ButtonAddRemove = ({ element, logs, setLogs }) => {
 	return (
 		<div className="btn-group">
 			<div className="button-add">
+				<IconButton
+					iconProps={{ iconName: "Add" }}
+					title="Emoji"
+					ariaLabel="Emoji"
+				/>
 				<button
 					className="button-add__button"
 					onClick={() => add(element, setLogs)}

@@ -27,7 +27,7 @@ const LogStatus = ({ children }) => {
 	});
 
 	return (
-		<div className="parent">
+		<div className="parent" class="ms-Grid">
 			<div className="data">
 				<span className="date">Date: {logs && logs.date}</span>
 				<span className="bread">Bread: {logs && logs.bread}</span>
