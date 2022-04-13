@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { initializeIcons } from "@fluentui/font-icons-mdl2";
-import "office-ui-fabric-core";
+import "office-ui-fabric-core/dist/css/fabric.min.css";
 
 initializeIcons();
 // After
