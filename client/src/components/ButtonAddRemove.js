@@ -23,58 +23,38 @@ const stackItemStyles = {
 	},
 };
 
-const add = (element, setLogs) => {
+const add = async (element, setLogs) => {
+	let response;
 	if (element === BREAD) {
-		addBread().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await addBread();
 	}
 	if (element === CAKE) {
-		addCake().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await addCake();
 	}
 	if (element === COOKIE) {
-		addCookie().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await addCookie();
 	}
+	if (response.error) {
+		return false;
+	}
+	setLogs(response);
 };
 
-const remove = (element, setLogs) => {
+const remove = async (element, setLogs) => {
+	let response;
 	if (element === BREAD) {
-		removeBread().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await removeBread();
 	}
 	if (element === CAKE) {
-		removeCake().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await removeCake();
 	}
 	if (element === COOKIE) {
-		removeCookie().then((response) => {
-			if (response.error) {
-				return false;
-			}
-			setLogs(response);
-		});
+		response = await removeCookie();
 	}
+	if (response.error) {
+		return false;
+	}
+	setLogs(response);
 };
 
 const ButtonAddRemove = ({ element, logs, setLogs }) => {
@@ -97,7 +77,7 @@ const ButtonAddRemove = ({ element, logs, setLogs }) => {
 						iconProps={{ iconName: "Add" }}
 						title={`add 1 ${element}`}
 						ariaLabel={`add 1 ${element}`}
-						onClick={() => add(element, setLogs)}
+						onClick={async () => add(element, setLogs)}
 					/>
 				</div>
 
@@ -109,7 +89,7 @@ const ButtonAddRemove = ({ element, logs, setLogs }) => {
 						iconProps={{ iconName: "Remove" }}
 						title={`remove 1 ${element}`}
 						ariaLabel={`remove 1 ${element}`}
-						onClick={() => remove(element, setLogs)}
+						onClick={async () => remove(element, setLogs)}
 					/>
 				</div>
 			</Stack>
