@@ -12,7 +12,16 @@ import {
 	DefaultSpacing,
 	NeutralColors,
 } from "@fluentui/theme";
+import { Stack } from "@fluentui/react";
 import { getLogs } from "../API/logs";
+
+const stackItemStyles = {
+	root: {
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "center",
+	},
+};
 
 const LogStatus = ({ children }) => {
 	const [logs, setLogs] = useState(null);
@@ -34,56 +43,73 @@ const LogStatus = ({ children }) => {
 	});
 
 	return (
-		<div
-			class="ms-Grid"
-			style={{
-				padding: DefaultSpacing.l2,
-				margin: DefaultSpacing.l2,
-				boxShadow: Depths.depth4,
-				background: NeutralColors.white,
-			}}
-		>
-			<div class="ms-Grid-row">
-				<div
+		<div>
+			<Stack
+				style={{
+					padding: DefaultSpacing.l2,
+					boxShadow: Depths.depth4,
+					background: NeutralColors.white,
+				}}
+			>
+				<Stack
 					style={{
-						fontSize: FontSizes.size24,
-						fontWeight: FontWeights.bold,
+						marginBottom: DefaultSpacing.l2,
 					}}
-					class=" ms-Grid-col ms-sm12"
 				>
-					Date: {logs && logs.date}
-				</div>
-			</div>
-			<div class="ms-Grid-row">
-				<div
-					style={{
-						fontSize: FontSizes.size16,
-						fontWeight: FontWeights.semibold,
-					}}
-					class="ms-Grid-col ms-sm4"
-				>
-					Bread: {logs && logs.bread}
-				</div>
-				<div
-					style={{
-						fontSize: FontSizes.size16,
-						fontWeight: FontWeights.semibold,
-					}}
-					class="ms-Grid-col ms-sm4"
-				>
-					Cookie: {logs && logs.cookie}
-				</div>
-				<div
-					style={{
-						fontSize: FontSizes.size16,
-						fontWeight: FontWeights.semibold,
-					}}
-					class="ms-Grid-col ms-sm4"
-				>
-					Cake: {logs && logs.cake}
-				</div>
-			</div>
-			<div class="children">{childrenWithProps}</div>
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size24,
+								fontWeight: FontWeights.semibold,
+							}}
+						>
+							Date: {logs && logs.date}
+						</div>
+					</Stack.Item>
+				</Stack>
+
+				<Stack horizontal>
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+							}}
+						>
+							Bread: {logs && logs.bread}
+						</div>
+					</Stack.Item>
+
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+							}}
+						>
+							Cookie: {logs && logs.cookie}
+						</div>
+					</Stack.Item>
+
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+							}}
+						>
+							Cake: {logs && logs.cake}
+						</div>
+					</Stack.Item>
+				</Stack>
+			</Stack>
+			<Stack horizontal 
+				style={{
+					marginTop:DefaultSpacing.l2,
+					padding: DefaultSpacing.l2,
+					boxShadow: Depths.depth4,
+					background: NeutralColors.white,
+				}}>{childrenWithProps}</Stack>
 		</div>
 	);
 };

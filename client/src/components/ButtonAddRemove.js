@@ -1,5 +1,6 @@
-import { IIconProps, IContextualMenuProps, Stack, Link } from "@fluentui/react";
+import { Stack } from "@fluentui/react";
 import { IconButton } from "@fluentui/react/lib/Button";
+import { FontSizes, FontWeights } from "@fluentui/theme";
 
 import {
 	addBread,
@@ -14,6 +15,13 @@ const BREAD = "bread";
 const CAKE = "cake";
 const COOKIE = "cookie";
 
+const stackItemStyles = {
+	root: {
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "center",
+	},
+};
 
 const add = (element, setLogs) => {
 	if (element === BREAD) {
@@ -73,40 +81,39 @@ const ButtonAddRemove = ({ element, logs, setLogs }) => {
 	const quantity = (logs && logs[element]) || 0;
 
 	return (
-		<div className="btn-group">
-			<div className="button-add">
-				<IconButton
-					iconProps={{ iconName: "Add" }}
-					title="Emoji"
-					ariaLabel="Emoji"
-				/>
-				<button
-					className="button-add__button"
-					onClick={() => add(element, setLogs)}
+		<Stack.Item grow={1} styles={stackItemStyles}>
+			<Stack styles={stackItemStyles}>
+				<div
+					style={{
+						fontSize: FontSizes.size16,
+						fontWeight: FontWeights.regular,
+					}}
 				>
-					<span className="button-add__icon">
-						<i className="fas fa-plus"></i>
-					</span>
-					<span className="button-add__text">add {element}</span>
-				</button>
-			</div>
-			<div>
-				<div className="quantity">{quantity}</div>
-			</div>
-			<div className="button-remove">
-				<button
-					className="button-remove__button"
-					onClick={() => remove(element, setLogs)}
-				>
-					<span className="button-remove__icon">
-						<i className="fas fa-minus"></i>
-					</span>
-					<span className="button-remove__text">
-						remove {element}
-					</span>
-				</button>
-			</div>
-		</div>
+					{element}
+				</div>
+
+				<div className="button-add">
+					<IconButton
+						iconProps={{ iconName: "Add" }}
+						title={`add 1 ${element}`}
+						ariaLabel={`add 1 ${element}`}
+						onClick={() => add(element, setLogs)}
+					/>
+				</div>
+
+				<div>
+					<div className="quantity">{quantity}</div>
+				</div>
+				<div className="button-remove">
+					<IconButton
+						iconProps={{ iconName: "Remove" }}
+						title={`remove 1 ${element}`}
+						ariaLabel={`remove 1 ${element}`}
+						onClick={() => remove(element, setLogs)}
+					/>
+				</div>
+			</Stack>
+		</Stack.Item>
 	);
 };
 

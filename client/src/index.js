@@ -3,8 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { initializeIcons } from "@fluentui/font-icons-mdl2";
-import "office-ui-fabric-core/dist/css/fabric.min.css";
+import { ThemeProvider, initializeIcons } from "@fluentui/react";
 
 initializeIcons();
 // After
@@ -12,7 +11,9 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
 	<StrictMode>
-		<App />
+		<ThemeProvider>
+			<App />
+		</ThemeProvider>
 	</StrictMode>
 );
 
