@@ -5,8 +5,14 @@ import {
 	CAKE,
 	COOKIE,
 } from "./components/ButtonAddRemove";
+import { ButtonToggle, WALK } from "./components/ButtonToggle";
 import "./App.css";
-import { NeutralColors, DefaultSpacing, FontSizes,FontWeights } from "@fluentui/theme";
+import {
+	NeutralColors,
+	DefaultSpacing,
+	FontSizes,
+	FontWeights,
+} from "@fluentui/theme";
 
 function App() {
 	return (
@@ -30,6 +36,7 @@ function App() {
 				<ButtonAddRemove element={BREAD} />
 				<ButtonAddRemove element={COOKIE} />
 				<ButtonAddRemove element={CAKE} />
+				<ButtonToggle element={WALK} />
 			</LogStatus>
 		</div>
 	);

@@ -4,6 +4,7 @@ const { Logs } = require("../database");
 const BREAD = 1;
 const CAKE = 2;
 const COOKIE = 3;
+const WALK = 4;
 
 const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	const logs = await getLogs(date);
@@ -13,6 +14,7 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	let newbread = logs.bread;
 	let newcake = logs.cake;
 	let newcookie = logs.cookie;
+	let newwalk = logs.walk;
 	if (element == BREAD) {
 		newbread = logs.bread + quantity;
 		if (newbread < 0) {
@@ -31,15 +33,22 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 			newcookie = 0;
 		}
 	}
+	if (element == WALK) {
+		newwalk = quantity === 1 ? true : false;
+	}
+
 	const updatedLog = await logs.update({
 		bread: newbread,
 		cake: newcake,
 		cookie: newcookie,
+		walk: newwalk,
 	});
+	console.log(updatedLog, newwalk, quantity, element == WALK);
 	return {
 		bread: updatedLog.bread,
 		cake: updatedLog.cake,
 		cookie: updatedLog.cookie,
+		walk: updatedLog.walk,
 		date: updatedLog.date,
 	};
 };
@@ -47,7 +56,7 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 const getLogs = async (date = Date.now()) => {
 	const logs = await Logs.findOne({
 		where: {
-			date: date
+			date: date,
 		},
 	});
 	if (logs === null) {

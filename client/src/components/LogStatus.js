@@ -34,6 +34,7 @@ const LogStatus = ({ children }) => {
 			setLogs(response);
 		});
 	}, [setLogs]);
+	console.log(logs);
 
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
@@ -101,15 +102,29 @@ const LogStatus = ({ children }) => {
 							Cake: {logs && logs.cake}
 						</div>
 					</Stack.Item>
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+							}}
+						>
+							Walk: {logs && logs.walk}
+						</div>
+					</Stack.Item>
 				</Stack>
 			</Stack>
-			<Stack horizontal 
+			<Stack
+				horizontal
 				style={{
-					marginTop:DefaultSpacing.l2,
+					marginTop: DefaultSpacing.l2,
 					padding: DefaultSpacing.l2,
 					boxShadow: Depths.depth4,
 					background: NeutralColors.white,
-				}}>{childrenWithProps}</Stack>
+				}}
+			>
+				{childrenWithProps}
+			</Stack>
 		</div>
 	);
 };

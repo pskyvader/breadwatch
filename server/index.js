@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const pgSession = require("connect-pg-simple")(session);
 const { connection } = require("./database");
 
-const { getLogs, updateLogs, BREAD, CAKE, COOKIE } = require("./api");
+const { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK } = require("./api");
 
 connection();
 
@@ -66,6 +66,15 @@ app.get("/cookie/add/:date?", async (req, res) => {
 });
 app.get("/cookie/remove/:date?", async (req, res) => {
 	const result = await updateLogs(req.params.date || Date.now(), COOKIE, -1);
+	res.json(result);
+});
+
+app.get("/walk/true/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), WALK, 1);
+	res.json(result);
+});
+app.get("/walk/false/:date?", async (req, res) => {
+	const result = await updateLogs(req.params.date || Date.now(), WALK, -1);
 	res.json(result);
 });
 

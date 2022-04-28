@@ -28,5 +28,10 @@ const LogsConfiguration = {
 		allowNull: false,
 		defaultValue: 0,
 	},
+	walk: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false,
+	},
 };
 module.exports = { LogsConfiguration };

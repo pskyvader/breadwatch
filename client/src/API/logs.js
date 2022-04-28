@@ -31,3 +31,12 @@ export const removeCake = (date = "") => {
 	const url = `/cake/remove/${date}`;
 	return request(url);
 };
+
+export const walkTrue = (date = "") => {
+	const url = `/walk/true/${date}`;
+	return request(url);
+};
+export const walkFalse = (date = "") => {
+	const url = `/walk/false/${date}`;
+	return request(url);
+};
