@@ -18,7 +18,6 @@ const toggle = async (element, on, setLogs) => {
 	if (element === WALK) {
 		response = on ? await walkFalse() : await walkTrue();
 	}
-	console.log(response, on, element);
 	if (response.error) {
 		return false;
 	}
@@ -27,8 +26,6 @@ const toggle = async (element, on, setLogs) => {
 
 const ButtonToggle = ({ element, logs, setLogs }) => {
 	const on = (logs && logs[element]) || false;
-	console.log(logs, element, on);
-
 	return (
 		<Stack.Item grow={1} styles={stackItemStyles}>
 			<Stack styles={stackItemStyles}>
@@ -43,7 +40,7 @@ const ButtonToggle = ({ element, logs, setLogs }) => {
 
 				<Toggle
 					label={`toggle ${element}`}
-					defaultChecked={on}
+					checked={on}
 					onText="On"
 					offText="Off"
 					onChange={async () => toggle(element, on, setLogs)}

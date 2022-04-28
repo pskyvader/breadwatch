@@ -34,7 +34,6 @@ const LogStatus = ({ children }) => {
 			setLogs(response);
 		});
 	}, [setLogs]);
-	console.log(logs);
 
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
@@ -42,6 +41,7 @@ const LogStatus = ({ children }) => {
 		}
 		return child;
 	});
+	if(logs===null) return null;
 
 	return (
 		<div>

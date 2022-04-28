@@ -43,7 +43,6 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 		cookie: newcookie,
 		walk: newwalk,
 	});
-	console.log(updatedLog, newwalk, quantity, element == WALK);
 	return {
 		bread: updatedLog.bread,
 		cake: updatedLog.cake,
@@ -67,4 +66,4 @@ const getLogs = async (date = Date.now()) => {
 	return logs;
 };
 
-module.exports = { getLogs, updateLogs, BREAD, CAKE, COOKIE };
+module.exports = { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };
