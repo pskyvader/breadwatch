@@ -12,7 +12,7 @@ import {
 	DefaultSpacing,
 	NeutralColors,
 } from "@fluentui/theme";
-import { Stack } from "@fluentui/react";
+import { Stack,Shimmer } from "@fluentui/react";
 import { getLogs } from "../API/logs";
 
 const stackItemStyles = {
@@ -23,25 +23,38 @@ const stackItemStyles = {
 	},
 };
 
-const LogStatus = ({ children }) => {
+const LogStatus = ({ children,date=Date.now() }) => {
 	const [logs, setLogs] = useState(null);
 
 	useEffect(() => {
-		getLogs().then((response) => {
+		setLogs(null);
+		getLogs(date).then((response) => {
 			if (response.error) {
 				return false;
 			}
 			setLogs(response);
 		});
-	}, [setLogs]);
+	}, [setLogs,date]);
+
 
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
-			return cloneElement(child, { logs, setLogs });
+			return cloneElement(child, { logs, setLogs,date });
 		}
 		return child;
 	});
-	if(logs===null) return null;
+	if (logs === null) {
+	return (
+		<div>
+		<Shimmer style={{
+  padding: 2}} />
+      <Shimmer style={{
+  padding: 2}} width="75%"/>
+      <Shimmer style={{
+  padding: 2}} width="50%"/>
+	  </div>
+	)
+	}
 
 	return (
 		<div>
@@ -64,7 +77,7 @@ const LogStatus = ({ children }) => {
 								fontWeight: FontWeights.semibold,
 							}}
 						>
-							Date: {logs && logs.date}
+							{logs && new Date(logs.date+" 00:00:00").toDateString()}
 						</div>
 					</Stack.Item>
 				</Stack>
@@ -109,7 +122,7 @@ const LogStatus = ({ children }) => {
 								fontWeight: FontWeights.semibold,
 							}}
 						>
-							Walk: {logs && logs.walk}
+							Walk: {logs && logs.walk ? "Yes" : "No"}
 						</div>
 					</Stack.Item>
 				</Stack>

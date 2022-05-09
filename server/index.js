@@ -38,43 +38,43 @@ app.use(express.static("client/build")); //Serves resources from public folder
 const path = require("path");
 
 app.get("/log/get/:date?", async (req, res) => {
-	const result = await getLogs(req.params.date || Date.now());
+	const result = await getLogs(parseInt(req.params.date) || Date.now());
 	res.json(result);
 });
 
 app.get("/bread/add/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), BREAD, 1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), BREAD, 1);
 	res.json(result);
 });
 app.get("/bread/remove/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), BREAD, -1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), BREAD, -1);
 	res.json(result);
 });
 
 app.get("/cake/add/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), CAKE, 1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), CAKE, 1);
 	res.json(result);
 });
 app.get("/cake/remove/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), CAKE, -1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), CAKE, -1);
 	res.json(result);
 });
 
 app.get("/cookie/add/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), COOKIE, 1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), COOKIE, 1);
 	res.json(result);
 });
 app.get("/cookie/remove/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), COOKIE, -1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), COOKIE, -1);
 	res.json(result);
 });
 
 app.get("/walk/true/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), WALK, 1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), WALK, 1);
 	res.json(result);
 });
 app.get("/walk/false/:date?", async (req, res) => {
-	const result = await updateLogs(req.params.date || Date.now(), WALK, -1);
+	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), WALK, -1);
 	res.json(result);
 });
 

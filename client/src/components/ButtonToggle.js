@@ -13,10 +13,10 @@ const stackItemStyles = {
 	},
 };
 
-const toggle = async (element, on, setLogs) => {
+const toggle = async (element, on, setLogs,date) => {
 	let response;
 	if (element === WALK) {
-		response = on ? await walkFalse() : await walkTrue();
+		response = on ? await walkFalse(date) : await walkTrue(date);
 	}
 	if (response.error) {
 		return false;
@@ -24,7 +24,7 @@ const toggle = async (element, on, setLogs) => {
 	setLogs(response);
 };
 
-const ButtonToggle = ({ element, logs, setLogs }) => {
+const ButtonToggle = ({ element, logs, setLogs,date=Date.Now() }) => {
 	const on = (logs && logs[element]) || false;
 	return (
 		<Stack.Item grow={1} styles={stackItemStyles}>
@@ -43,7 +43,7 @@ const ButtonToggle = ({ element, logs, setLogs }) => {
 					checked={on}
 					onText="On"
 					offText="Off"
-					onChange={async () => toggle(element, on, setLogs)}
+					onChange={async () => toggle(element, on, setLogs,date)}
 				/>
 			</Stack>
 		</Stack.Item>

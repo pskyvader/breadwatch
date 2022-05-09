@@ -1,11 +1,4 @@
-import LogStatus from "./components/LogStatus";
-import {
-	ButtonAddRemove,
-	BREAD,
-	CAKE,
-	COOKIE,
-} from "./components/ButtonAddRemove";
-import { ButtonToggle, WALK } from "./components/ButtonToggle";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import {
 	NeutralColors,
@@ -13,32 +6,25 @@ import {
 	FontSizes,
 	FontWeights,
 } from "@fluentui/theme";
+import Home from "./pages/Home";
+import Header from "./pages/Header";
 
 function App() {
 	return (
-		<div
-			style={{
-				backgroundColor: NeutralColors.gray10,
-				padding: DefaultSpacing.l2,
-				minHeight: "100vh",
-			}}
-		>
-			<div
-				style={{
-					fontSize: FontSizes.size32,
-					marginBottom: DefaultSpacing.l2,
-					fontWeight: FontWeights.semibold,
-				}}
-			>
-				BreadWatch
-			</div>
-			<LogStatus>
-				<ButtonAddRemove element={BREAD} />
-				<ButtonAddRemove element={COOKIE} />
-				<ButtonAddRemove element={CAKE} />
-				<ButtonToggle element={WALK} />
-			</LogStatus>
-		</div>
+<BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Header />}>
+        <Route index element={<Home />} />
+        <Route path="date">
+          <Route index element={<Home />} />
+          <Route path=":date" element={<Home />} />
+        </Route>
+      </Route>
+	  
+	  <Route path="*">Not found </Route>
+    </Routes>
+  </BrowserRouter>
+
 	);
 }
 
