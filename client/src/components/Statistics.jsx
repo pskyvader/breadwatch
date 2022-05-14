@@ -1,7 +1,12 @@
 import { LineChart } from "@fluentui/react-charting";
-import { DefaultPalette } from "@fluentui/react";
+import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
 
-const data = {
+import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
+import { useState, useEffect } from "react";
+
+import { getAllLogs } from "../API/logs";
+
+const data2 = {
 	chartTitle: "Line Chart",
 	lineChartData: [
 		{
@@ -45,14 +50,49 @@ const data = {
 
 // functional component for statistics
 const Statistics = (props) => {
+	const [dataset, setDataset] = useState(null);
+
+	useEffect(() => {
+		console.log(dataset);
+		setDataset(null);
+		getAllLogs().then((response) => {
+			if (response.error) {
+				return false;
+			}
+            console.log("response", response);
+			setDataset(response);
+		});
+	}, [setDataset, dataset]);
+
+	if (dataset === null) {
+		return (
+			<div>
+				<Shimmer style={{ padding: 2 }} />
+				<Shimmer style={{ padding: 2 }} width="75%" />
+				<Shimmer style={{ padding: 2 }} width="50%" />
+			</div>
+		);
+	}
+	console.log(dataset);
+    return <div> data</div>;
 	return (
-		<LineChart
-			data={data}
-			strokeWidth={4}
-			tickFormat={"%m/%d"}
-			height={300}
-			width={600}
-		/>
+		<div>
+			<Stack
+				style={{
+					padding: DefaultSpacing.l2,
+					boxShadow: Depths.depth4,
+					background: NeutralColors.white,
+				}}
+			>
+				<LineChart
+					data={dataset}
+					strokeWidth={4}
+					tickFormat={"%m/%d"}
+					height={300}
+					width={600}
+				/>
+			</Stack>
+		</div>
 	);
 };
 

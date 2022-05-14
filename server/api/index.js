@@ -1,3 +1,11 @@
-const { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK } = require("./logs");
+const {
+	getAllLogs,
+	getLogs,
+	updateLogs,
+	BREAD,
+	CAKE,
+	COOKIE,
+	WALK,
+} = require("./logs");
 
-module.exports = { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };
+module.exports = { getAllLogs, getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };

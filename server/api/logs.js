@@ -66,4 +66,14 @@ const getLogs = async (date = Date.now()) => {
 	return logs;
 };
 
-module.exports = { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };
+const getAllLogs = async () => {
+	const logs = await Logs.findAll({
+		order: [["date", "ASC"]],
+	});
+	if (logs === null) {
+		return [];
+	}
+	return logs;
+};
+
+module.exports = { getAllLogs, getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };

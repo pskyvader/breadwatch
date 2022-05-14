@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const pgSession = require("connect-pg-simple")(session);
 const { connection } = require("./database");
 
-const { getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK } = require("./api");
+const {getAllLogs, getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK } = require("./api");
 
 connection();
 
@@ -36,6 +36,11 @@ app.use(express.static("client/build")); //Serves resources from public folder
 // let the react app to handle any unknown routes
 // serve up the index.html if express does'nt recognize the route
 const path = require("path");
+
+app.get("/log/get/all", async (req, res) => {
+	const result = await getAllLogs();
+	res.json(result);
+});
 
 app.get("/log/get/:date?", async (req, res) => {
 	const result = await getLogs(parseInt(req.params.date) || Date.now());

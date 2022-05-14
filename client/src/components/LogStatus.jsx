@@ -28,6 +28,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 			setLogs(response);
 		});
 	}, [setLogs, date]);
+	
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
 			return cloneElement(child, { logs, setLogs, date });
