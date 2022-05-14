@@ -12,20 +12,13 @@ import {
 	DefaultSpacing,
 	NeutralColors,
 } from "@fluentui/theme";
-import { Stack,Shimmer } from "@fluentui/react";
+import { Stack, Shimmer } from "@fluentui/react";
 import { getLogs } from "../API/logs";
-
 const stackItemStyles = {
-	root: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-	},
+	root: { alignItems: "center", display: "flex", justifyContent: "center" },
 };
-
-const LogStatus = ({ children,date=Date.now() }) => {
+const LogStatus = ({ children, date = Date.now() }) => {
 	const [logs, setLogs] = useState(null);
-
 	useEffect(() => {
 		setLogs(null);
 		getLogs(date).then((response) => {
@@ -34,28 +27,22 @@ const LogStatus = ({ children,date=Date.now() }) => {
 			}
 			setLogs(response);
 		});
-	}, [setLogs,date]);
-
-
+	}, [setLogs, date]);
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
-			return cloneElement(child, { logs, setLogs,date });
+			return cloneElement(child, { logs, setLogs, date });
 		}
 		return child;
 	});
 	if (logs === null) {
-	return (
-		<div>
-		<Shimmer style={{
-  padding: 2}} />
-      <Shimmer style={{
-  padding: 2}} width="75%"/>
-      <Shimmer style={{
-  padding: 2}} width="50%"/>
-	  </div>
-	)
+		return (
+			<div>
+				<Shimmer style={{ padding: 2 }} />
+				<Shimmer style={{ padding: 2 }} width="75%" />
+				<Shimmer style={{ padding: 2 }} width="50%" />
+			</div>
+		);
 	}
-
 	return (
 		<div>
 			<Stack
@@ -65,11 +52,7 @@ const LogStatus = ({ children,date=Date.now() }) => {
 					background: NeutralColors.white,
 				}}
 			>
-				<Stack
-					style={{
-						marginBottom: DefaultSpacing.l2,
-					}}
-				>
+				<Stack style={{ marginBottom: DefaultSpacing.l2 }}>
 					<Stack.Item grow={1} styles={stackItemStyles}>
 						<div
 							style={{
@@ -77,11 +60,13 @@ const LogStatus = ({ children,date=Date.now() }) => {
 								fontWeight: FontWeights.semibold,
 							}}
 						>
-							{logs && new Date(logs.date+" 00:00:00").toDateString()}
+							{logs &&
+								new Date(
+									logs.date + " 00:00:00"
+								).toDateString()}
 						</div>
 					</Stack.Item>
 				</Stack>
-
 				<Stack horizontal>
 					<Stack.Item grow={1} styles={stackItemStyles}>
 						<div
@@ -93,7 +78,6 @@ const LogStatus = ({ children,date=Date.now() }) => {
 							Bread: {logs && logs.bread}
 						</div>
 					</Stack.Item>
-
 					<Stack.Item grow={1} styles={stackItemStyles}>
 						<div
 							style={{
@@ -104,7 +88,6 @@ const LogStatus = ({ children,date=Date.now() }) => {
 							Cookie: {logs && logs.cookie}
 						</div>
 					</Stack.Item>
-
 					<Stack.Item grow={1} styles={stackItemStyles}>
 						<div
 							style={{
@@ -141,5 +124,4 @@ const LogStatus = ({ children,date=Date.now() }) => {
 		</div>
 	);
 };
-
 export default LogStatus;

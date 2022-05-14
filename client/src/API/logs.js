@@ -1,7 +1,11 @@
 import request from "./request";
 
-export const getLogs = (date = "") => {
-	const url = `/log/get/${date}`;
+export const getLogs = (date = "", date2 = "") => {
+	const url = `/log/get/${date}${date2 !== "" ? "/" : ""}${date2}`;
+	return request(url);
+};
+export const getAllLogs = () => {
+	const url = `/log/get/all`;
 	return request(url);
 };
 

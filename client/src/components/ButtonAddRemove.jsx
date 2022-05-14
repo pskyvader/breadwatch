@@ -23,7 +23,7 @@ const stackItemStyles = {
 	},
 };
 
-const add = async (element, setLogs,date) => {
+const add = async (element, setLogs, date) => {
 	let response;
 	if (element === BREAD) {
 		response = await addBread(date);
@@ -40,7 +40,7 @@ const add = async (element, setLogs,date) => {
 	setLogs(response);
 };
 
-const remove = async (element, setLogs,date) => {
+const remove = async (element, setLogs, date) => {
 	let response;
 	if (element === BREAD) {
 		response = await removeBread(date);
@@ -57,9 +57,8 @@ const remove = async (element, setLogs,date) => {
 	setLogs(response);
 };
 
-const ButtonAddRemove = ({ element, logs, setLogs,date=Date.now() }) => {
+const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 	const quantity = (logs && logs[element]) || 0;
-
 	return (
 		<Stack.Item grow={1} styles={stackItemStyles}>
 			<Stack styles={stackItemStyles}>
@@ -71,16 +70,14 @@ const ButtonAddRemove = ({ element, logs, setLogs,date=Date.now() }) => {
 				>
 					{element}
 				</div>
-
 				<div className="button-add">
 					<IconButton
 						iconProps={{ iconName: "Add" }}
 						title={`add 1 ${element}`}
 						ariaLabel={`add 1 ${element}`}
-						onClick={async () => add(element, setLogs,date)}
+						onClick={async () => add(element, setLogs, date)}
 					/>
 				</div>
-
 				<div>
 					<div className="quantity">{quantity}</div>
 				</div>
@@ -89,7 +86,7 @@ const ButtonAddRemove = ({ element, logs, setLogs,date=Date.now() }) => {
 						iconProps={{ iconName: "Remove" }}
 						title={`remove 1 ${element}`}
 						ariaLabel={`remove 1 ${element}`}
-						onClick={async () => remove(element, setLogs,date)}
+						onClick={async () => remove(element, setLogs, date)}
 					/>
 				</div>
 			</Stack>
