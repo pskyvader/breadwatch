@@ -6,63 +6,30 @@ import { useState, useEffect } from "react";
 
 import { getAllLogs } from "../API/logs";
 
-const data2 = {
-	chartTitle: "Line Chart",
-	lineChartData: [
-		{
-			data: [
-				{
-					x: 10,
-					y: 24,
-					xAxisCalloutData: "2018/01/01",
-					yAxisCalloutData: "24%",
-				},
-				{
-					x: 20,
-					y: 4,
-					xAxisCalloutData: "2018/01/01",
-					yAxisCalloutData: "24%",
-				},
-				{
-					x: 30,
-					y: 20,
-					xAxisCalloutData: "2018/01/01",
-					yAxisCalloutData: "24%",
-				},
-				{
-					x: 40,
-					y: 10,
-					xAxisCalloutData: "2018/01/01",
-					yAxisCalloutData: "24%",
-				},
-				{
-					x: 50,
-					y: 20,
-					xAxisCalloutData: "2018/01/01",
-					yAxisCalloutData: "24%",
-				},
-			],
-			legend: "One",
-			color: DefaultPalette.blue,
-		},
-	],
+
+const parseData = (data,field) => {
+	const dataArray = data.map((element) => {
+		return {
+			x: new Date(element.date),
+			y: element[field],
+		};
+	});
+	console.log("dataArray", dataArray);
+	return dataArray;
 };
 
 // functional component for statistics
-const Statistics = (props) => {
+const Statistics = () => {
 	const [dataset, setDataset] = useState(null);
-
 	useEffect(() => {
-		console.log(dataset);
 		setDataset(null);
 		getAllLogs().then((response) => {
 			if (response.error) {
 				return false;
 			}
-            console.log("response", response);
 			setDataset(response);
 		});
-	}, [setDataset, dataset]);
+	}, [setDataset]);
 
 	if (dataset === null) {
 		return (
@@ -73,8 +40,31 @@ const Statistics = (props) => {
 			</div>
 		);
 	}
-	console.log(dataset);
-    return <div> data</div>;
+	const data1 = parseData(dataset,"bread");
+	const data2 = parseData(dataset,"cookie");
+	const data3 = parseData(dataset,"cake");
+
+	const data4 = {
+		chartTitle: "Line Chart",
+		lineChartData: [
+			{
+				data: data1,
+				legend: "Bread",
+				color: DefaultPalette.blue,
+			},
+			{
+				data: data2,
+				legend: "Cookie",
+				color: DefaultPalette.green,
+			},
+			{
+				data: data3,
+				legend: "Cake",
+				color: DefaultPalette.red,
+			},
+		],
+	};
+
 	return (
 		<div>
 			<Stack
@@ -85,12 +75,25 @@ const Statistics = (props) => {
 				}}
 			>
 				<LineChart
-					data={dataset}
+            culture={window.navigator.language}
+            data={data4}
+            legendsOverflowText={'Overflow Items'}
+            yMinValue={0}
+            yMaxValue={20}
+			height={600}
+			width={600}
+            // margins={margins}
+            allowMultipleShapesForPoints={true}
+          />
+				{/* <LineChart
+					data={data4}
 					strokeWidth={4}
 					tickFormat={"%m/%d"}
-					height={300}
+					height={600}
 					width={600}
-				/>
+					hideLegend={false}
+					showXAxisLablesTooltip
+				/> */}
 			</Stack>
 		</div>
 	);
