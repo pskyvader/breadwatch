@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { LineChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
 
@@ -7,7 +8,7 @@ import { useState, useEffect } from "react";
 import { getAllLogs } from "../API/logs";
 
 const parseData = (data, field) => {
-	const dataArray = data.map((element) => {
+	return data.map((element) => {
 		return {
 			x: new Date(element.date),
 			y: element[field],
@@ -15,8 +16,6 @@ const parseData = (data, field) => {
 			yAxisCalloutData: element[field],
 		};
 	});
-	console.log("dataArray", dataArray);
-	return dataArray;
 };
 
 // functional component for statistics
@@ -46,7 +45,7 @@ const Statistics = () => {
 	const data3 = parseData(dataset, "cake");
 
 	const data4 = {
-		chartTitle: "Line Chart",
+		chartTitle: "Last month",
 		lineChartData: [
 			{
 				data: data1,
@@ -65,35 +64,33 @@ const Statistics = () => {
 			},
 		],
 	};
+
 	const margins = { left: 35, top: 20, bottom: 35, right: 20 };
+
+	const rootStyle = { width: `600px`, height: `300px` };
 
 	return (
 		<div>
-			{/* <Stack
+			<Stack
 				style={{
 					padding: DefaultSpacing.l2,
+					marginTop: DefaultSpacing.l2,
 					boxShadow: Depths.depth4,
 					background: NeutralColors.white,
 				}}
-			> */}
+			>
+				Bread: blue,Cookie:gree, Cake: red
 				<LineChart
 					data={data4}
-					legendsOverflowText={"Overflow Items"}
-					width={300}
-					height={600}
 					tickFormat={"%m/%d"}
-					// margins={margins}
-					// showXAxisLablesTooltip
-					// allowMultipleShapesForPoints={true}
-					// xAxisTickCount={10}
-					// legendProps={{
-					// 	canSelectMultipleLegends: true,
-					// 	allowFocusOnLegends: true,
-					// }}
+					margins={margins}
+					allowMultipleShapesForPoints={true}
+					xAxisTickCount={10}
 				/>
-			{/* </Stack> */}
+			</Stack>
 		</div>
 	);
 };
+
 
 export default Statistics;

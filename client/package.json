@@ -5,7 +5,7 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@fluentui/react": "^8.64.2",
-    "@fluentui/react-charting": "^5.9.28",
+    "@fluentui/react-charting": "^5.9.46",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
