@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { LineChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
 
@@ -21,6 +21,8 @@ const parseData = (data, field) => {
 // functional component for statistics
 const Statistics = () => {
 	const [dataset, setDataset] = useState(null);
+	const [height, setHeight] = useState(null);
+	const [width, setWidth] = useState(null);
 	useEffect(() => {
 		setDataset(null);
 		getAllLogs().then((response) => {
@@ -67,7 +69,16 @@ const Statistics = () => {
 
 	const margins = { left: 35, top: 20, bottom: 35, right: 20 };
 
-	const rootStyle = { width: `600px`, height: `300px` };
+	// const rootStyle = { width: `600px`, height: `300px` };
+	const handleResize = () => {
+		if (window.innerWidth !== width) {
+			setWidth(window.innerWidth);
+		}
+		if (window.innerHeight !== height) {
+			setHeight(Math.max(window.innerHeight, 300));
+		}
+	};
+	window.addEventListener("resize", handleResize);
 
 	return (
 		<div>
@@ -81,6 +92,9 @@ const Statistics = () => {
 			>
 				Bread: blue,Cookie:gree, Cake: red
 				<LineChart
+					height={height}
+					// height={300}
+					width={width}
 					data={data4}
 					tickFormat={"%m/%d"}
 					margins={margins}
@@ -91,6 +105,5 @@ const Statistics = () => {
 		</div>
 	);
 };
-
 
 export default Statistics;
