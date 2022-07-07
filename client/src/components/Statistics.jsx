@@ -73,7 +73,7 @@ const Statistics = () => {
 	const rootStyle = {
 		// width: width + margins.left + margins.right,
 		// height: height + margins.top + margins.bottom,
-		width: width,
+		// width: width,
 		height: height,
 	};
 
@@ -95,14 +95,16 @@ const Statistics = () => {
 					window.innerHeight -
 						margins.top -
 						margins.bottom -
-						parseInt(DefaultSpacing.l2) * 4,
+						parseInt(DefaultSpacing.l2) * 6,
 					300
 				)
 			);
 		}
 	};
 	window.addEventListener("resize", debounce(handleResize, 500));
-
+	if (width === null || height === null) {
+		handleResize();
+	}
 
 	return (
 		<div>
@@ -118,7 +120,7 @@ const Statistics = () => {
 				<div style={rootStyle}>
 					<LineChart
 						height={height}
-						// width={width}
+						width={width}
 						data={data4}
 						tickFormat={"%m/%d"}
 						margins={margins}

@@ -12,8 +12,8 @@ const Header = () => {
 			style={{
 				backgroundColor: NeutralColors.gray10,
 				padding: DefaultSpacing.l2,
-				marginBottom: DefaultSpacing.l2,
-				minHeight: "100vh",
+				// marginBottom: DefaultSpacing.l2,
+				minHeight: `calc(100vh - ${DefaultSpacing.l2} - ${DefaultSpacing.l2})`,
 			}}
 		>
 			<div
