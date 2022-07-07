@@ -6,6 +6,7 @@ import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
 import { useState, useEffect } from "react";
 
 import { getAllLogs } from "../API/logs";
+import debounce from "../utils/debounce";
 
 const parseData = (data, field) => {
 	return data.map((element) => {
@@ -69,16 +70,39 @@ const Statistics = () => {
 
 	const margins = { left: 35, top: 20, bottom: 35, right: 20 };
 
-	// const rootStyle = { width: `600px`, height: `300px` };
+	const rootStyle = {
+		// width: width + margins.left + margins.right,
+		// height: height + margins.top + margins.bottom,
+		width: width,
+		height: height,
+	};
+
 	const handleResize = () => {
 		if (window.innerWidth !== width) {
-			setWidth(window.innerWidth);
+			setWidth(
+				Math.max(
+					window.innerWidth -
+						margins.left -
+						margins.right -
+						parseInt(DefaultSpacing.l2) * 4,
+					300
+				)
+			);
 		}
 		if (window.innerHeight !== height) {
-			setHeight(Math.max(window.innerHeight, 300));
+			setHeight(
+				Math.max(
+					window.innerHeight -
+						margins.top -
+						margins.bottom -
+						parseInt(DefaultSpacing.l2) * 4,
+					300
+				)
+			);
 		}
 	};
-	window.addEventListener("resize", handleResize);
+	window.addEventListener("resize", debounce(handleResize, 500));
+
 
 	return (
 		<div>
@@ -90,17 +114,18 @@ const Statistics = () => {
 					background: NeutralColors.white,
 				}}
 			>
-				Bread: blue,Cookie:gree, Cake: red
-				<LineChart
-					height={height}
-					// height={300}
-					width={width}
-					data={data4}
-					tickFormat={"%m/%d"}
-					margins={margins}
-					allowMultipleShapesForPoints={true}
-					xAxisTickCount={10}
-				/>
+				{/* Bread: blue,Cookie:gree, Cake: red */}
+				<div style={rootStyle}>
+					<LineChart
+						height={height}
+						// width={width}
+						data={data4}
+						tickFormat={"%m/%d"}
+						margins={margins}
+						allowMultipleShapesForPoints={true}
+						xAxisTickCount={10}
+					/>
+				</div>
 			</Stack>
 		</div>
 	);
