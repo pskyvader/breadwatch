@@ -1,15 +1,77 @@
 import * as React from "react";
-import { LineChart } from "@fluentui/react-charting";
+import { LineChart, AreaChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
-import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
+import { DefaultButton } from "@fluentui/react/lib/Button";
 
 import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
 import { useState, useEffect } from "react";
 
 import { getAllLogs } from "../API/logs";
 import debounce from "../utils/debounce";
+import getWeekYear from "../utils/getWeekYear";
 
-const parseData = (data, field, frequency) => {
+const _DAYLY_ = "dayly";
+const _WEEKLY_ = "weekly";
+const _MONTHLY_ = "monthly";
+
+const products = ["bread", "cookie", "cake"];
+
+const groupData = (data, frequency) => {
+	if (frequency === _DAYLY_) {
+		return data;
+	}
+	const groupedData = data.reduce((previous, element) => {
+		const parsedDate = new Date(element.date);
+		if (frequency === _WEEKLY_) {
+			const week = getWeekYear(parsedDate);
+			if (!previous[week]) {
+				previous[week] = [];
+			}
+			previous[week].push(element);
+			return previous;
+		}
+		if (frequency === _MONTHLY_) {
+			const month = parsedDate.getMonth();
+			if (!previous[month]) {
+				previous[month] = [];
+			}
+			previous[month].push(element);
+			return previous;
+		}
+		return undefined;
+	}, {});
+	console.log(groupedData);
+
+	return groupedData;
+};
+
+const processData = (groupedData, frequency) => {
+	if (frequency === _DAYLY_) {
+		return groupedData;
+	}
+	const proccessedData = [];
+	for (const key in groupedData) {
+		if (Object.hasOwnProperty.call(groupedData, key)) {
+			const element = groupedData[key];
+			const proccessedElement = element.reduce((prev, e) => {
+				if (!prev.date) {
+					prev.date = e.date;
+				}
+				for (const product of products) {
+					prev[product] =
+						(prev[product] || 0) + e[product] / element.length;
+				}
+				return prev;
+			}, {});
+			proccessedData.push(proccessedElement);
+		}
+	}
+
+	console.log(proccessedData);
+	return proccessedData;
+};
+
+const parseData = (data, field) => {
 	return data.map((element) => {
 		return {
 			x: new Date(element.date),
@@ -25,7 +87,8 @@ const Statistics = () => {
 	const [dataset, setDataset] = useState(null);
 	const [height, setHeight] = useState(null);
 	const [width, setWidth] = useState(null);
-	const [frequency, setFrequency] = useState(1);
+	const [frequency, setFrequency] = useState(_DAYLY_);
+	const [chartTipe, setChartTipe] = useState(1);
 
 	useEffect(() => {
 		setDataset(null);
@@ -52,9 +115,13 @@ const Statistics = () => {
 			</div>
 		);
 	}
-	const data1 = parseData(dataset, "bread", frequency);
-	const data2 = parseData(dataset, "cookie", frequency);
-	const data3 = parseData(dataset, "cake", frequency);
+
+	const groupedData = groupData(dataset, frequency);
+	const proccessedData = processData(groupedData, frequency);
+
+	const data1 = parseData(proccessedData, "bread");
+	const data2 = parseData(proccessedData, "cookie");
+	const data3 = parseData(proccessedData, "cake");
 
 	const data4 = {
 		chartTitle: "Last month",
@@ -127,8 +194,54 @@ const Statistics = () => {
 				wrap
 			>
 				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
-					<DefaultButton onClick={() => handleFrequency(10)}>
-						10
+					<DefaultButton
+						checked={frequency === _DAYLY_}
+						onClick={() => handleFrequency(_DAYLY_)}
+					>
+						{_DAYLY_}
+					</DefaultButton>
+				</Stack.Item>
+				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+					<DefaultButton
+						checked={frequency === _WEEKLY_}
+						onClick={() => handleFrequency(_WEEKLY_)}
+					>
+						{_WEEKLY_}
+					</DefaultButton>
+				</Stack.Item>
+				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+					<DefaultButton
+						checked={frequency === _MONTHLY_}
+						onClick={() => handleFrequency(_MONTHLY_)}
+					>
+						{_MONTHLY_}
+					</DefaultButton>
+				</Stack.Item>
+			</Stack>
+
+			<Stack
+				horizontal
+				// style={{
+				// 	paddingTop: DefaultSpacing.l2,
+				// 	paddingBottom: DefaultSpacing.l2,
+				// }}
+				disableShrink
+				wrap
+			>
+				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+					<DefaultButton
+						checked={chartTipe === 1}
+						onClick={() => setChartTipe(1)}
+					>
+						Unique Values
+					</DefaultButton>
+				</Stack.Item>
+				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+					<DefaultButton
+						checked={chartTipe === 2}
+						onClick={() => setChartTipe(2)}
+					>
+						Accumulated Values
 					</DefaultButton>
 				</Stack.Item>
 			</Stack>
@@ -142,15 +255,26 @@ const Statistics = () => {
 			>
 				{/* Bread: blue,Cookie:gree, Cake: red */}
 				<div style={rootStyle}>
-					<LineChart
-						height={height}
-						width={width}
-						data={data4}
-						tickFormat={"%m/%d"}
-						margins={margins}
-						allowMultipleShapesForPoints={true}
-						xAxisTickCount={10}
-					/>
+					{chartTipe === 1 && (
+						<LineChart
+							height={height}
+							width={width}
+							data={data4}
+							tickFormat={"%m/%d"}
+							margins={margins}
+							allowMultipleShapesForPoints={true}
+							xAxisTickCount={10}
+						/>
+					)}
+					{chartTipe === 2 && (
+						<AreaChart
+							height={height}
+							width={width}
+							data={data4}
+							tickFormat={"%m/%d"}
+							margins={margins}
+						/>
+					)}
 				</div>
 			</Stack>
 		</div>
