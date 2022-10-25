@@ -95,7 +95,7 @@ const handleResize = (width, height, margins) => {
 			window.innerHeight -
 				margins.top -
 				margins.bottom -
-				parseInt(DefaultSpacing.l2) * 8,
+				parseInt(DefaultSpacing.l2) * 10,
 			300
 		);
 	}
@@ -108,7 +108,6 @@ const Statistics = () => {
 	const [width, setWidth] = useState(null);
 	const [frequency, setFrequency] = useState(_DAYLY_);
 	const [chartTipe, setChartTipe] = useState(1);
-	console.log(width);
 
 	const margins = useMemo(
 		() => ({ left: 35, top: 20, bottom: 35, right: 20 }),
@@ -122,19 +121,24 @@ const Statistics = () => {
 			}
 			setDataset(response);
 		});
-		window.addEventListener(
-			"resize",
-			debounce(() => {
-				const { w, h } = handleResize(width, height, margins);
-				if (w !== width) {
-					setWidth(w);
-				}
-				if (h !== height) {
-					setHeight(h);
-				}
-			}),
-			500
-		);
+
+		const setResize = debounce(() => {
+			const { w, h } = handleResize(width, height, margins);
+			if (w !== width) {
+				setWidth(w);
+			}
+			if (h !== height) {
+				setHeight(h);
+			}
+		}, 500);
+
+		window.addEventListener("resize", setResize);
+		if (width === null || height === null) {
+			setResize();
+		}
+		return () => {
+			window.removeEventListener("resize", setResize);
+		};
 	}, [setDataset, width, height, margins]);
 
 	const handleFrequency = (newFrequency) => {
@@ -143,12 +147,37 @@ const Statistics = () => {
 		}
 	};
 
-	const groupedData = useMemo(() => {
-		groupData(dataset, frequency);
+	const chartData = useMemo(() => {
+		if (dataset === null) {
+			return null;
+		}
+		const groupedData = groupData(dataset, frequency);
+		const proccessedData = processData(groupedData, frequency);
+		const data1 = parseData(proccessedData, "bread");
+		const data2 = parseData(proccessedData, "cookie");
+		const data3 = parseData(proccessedData, "cake");
+
+		return {
+			chartTitle: "Last month",
+			lineChartData: [
+				{
+					data: data1,
+					legend: "Bread",
+					color: DefaultPalette.blue,
+				},
+				{
+					data: data2,
+					legend: "Cookie",
+					color: DefaultPalette.green,
+				},
+				{
+					data: data3,
+					legend: "Cake",
+					color: DefaultPalette.red,
+				},
+			],
+		};
 	}, [dataset, frequency]);
-	const proccessedData = useMemo(() => {
-		processData(groupedData, frequency);
-	}, [groupedData, frequency]);
 
 	if (dataset === null) {
 		return (
@@ -160,41 +189,12 @@ const Statistics = () => {
 		);
 	}
 
-	const data1 = parseData(proccessedData, "bread");
-	const data2 = parseData(proccessedData, "cookie");
-	const data3 = parseData(proccessedData, "cake");
-
-	const data4 = {
-		chartTitle: "Last month",
-		lineChartData: [
-			{
-				data: data1,
-				legend: "Bread",
-				color: DefaultPalette.blue,
-			},
-			{
-				data: data2,
-				legend: "Cookie",
-				color: DefaultPalette.green,
-			},
-			{
-				data: data3,
-				legend: "Cake",
-				color: DefaultPalette.red,
-			},
-		],
-	};
-
 	const rootStyle = {
 		// width: width + margins.left + margins.right,
 		// height: height + margins.top + margins.bottom,
 		// width: width,
 		height: height,
 	};
-
-	// if (width === null || height === null) {
-	// 	handleResize();
-	// }
 
 	return (
 		<div>
@@ -242,6 +242,7 @@ const Statistics = () => {
 					style={{
 						justifyContent: "left",
 						paddingTop: DefaultSpacing.l1,
+						paddingRight: DefaultSpacing.l1,
 					}}
 				>
 					<DefaultButton
@@ -294,7 +295,7 @@ const Statistics = () => {
 						<LineChart
 							height={height}
 							width={width}
-							data={data4}
+							data={chartData}
 							tickFormat={"%m/%d"}
 							margins={margins}
 							allowMultipleShapesForPoints={true}
@@ -305,7 +306,7 @@ const Statistics = () => {
 						<AreaChart
 							height={height}
 							width={width}
-							data={data4}
+							data={chartData}
 							tickFormat={"%m/%d"}
 							margins={margins}
 						/>
