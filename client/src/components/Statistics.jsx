@@ -195,91 +195,75 @@ const Statistics = () => {
 		// width: width,
 		height: height,
 	};
+	const textStyles = {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "left",
+		marginRight: DefaultSpacing.l1,
+		marginTop: DefaultSpacing.l1,
+	};
 
 	return (
 		<div>
 			<Stack
 				horizontal
-				style={
-					{
-						// paddingTop: DefaultSpacing.l1,
-						// paddingBottom: DefaultSpacing.l2,
-					}
-				}
+				style={{
+					// paddingTop: DefaultSpacing.l1,
+					// paddingBottom: DefaultSpacing.l2,
+				}}
 				disableShrink
 				wrap
 			>
-				<Stack.Item
+				<Stack
+					horizontal
+					disableShrink
+					wrap
 					grow={1}
-					style={{
-						justifyContent: "left",
-						paddingTop: DefaultSpacing.l1,
-					}}
+					// style={textStyles}
 				>
 					<DefaultButton
+						style={textStyles}
 						checked={frequency === _DAYLY_}
 						onClick={() => handleFrequency(_DAYLY_)}
 					>
 						{_DAYLY_}
 					</DefaultButton>
-				</Stack.Item>
-				<Stack.Item
-					grow={1}
-					style={{
-						justifyContent: "left",
-						paddingTop: DefaultSpacing.l1,
-					}}
-				>
 					<DefaultButton
+						style={textStyles}
 						checked={frequency === _WEEKLY_}
 						onClick={() => handleFrequency(_WEEKLY_)}
 					>
 						{_WEEKLY_}
 					</DefaultButton>
-				</Stack.Item>
-				<Stack.Item
-					grow={1}
-					style={{
-						justifyContent: "left",
-						paddingTop: DefaultSpacing.l1,
-						paddingRight: DefaultSpacing.l1,
-					}}
-				>
 					<DefaultButton
+						style={textStyles}
 						checked={frequency === _MONTHLY_}
 						onClick={() => handleFrequency(_MONTHLY_)}
 					>
 						{_MONTHLY_}
 					</DefaultButton>
-				</Stack.Item>
-				<Stack.Item
+				</Stack>
+				<Stack
+					horizontal
+					disableShrink
+					// wrap
 					grow={1}
-					style={{
-						justifyContent: "right",
-						paddingTop: DefaultSpacing.l1,
-					}}
 				>
 					<PrimaryButton
+						style={textStyles}
 						checked={chartTipe === 1}
 						onClick={() => setChartTipe(1)}
 					>
 						Unique Values
 					</PrimaryButton>
-				</Stack.Item>
-				<Stack.Item
-					grow={1}
-					style={{
-						justifyContent: "right",
-						paddingTop: DefaultSpacing.l1,
-					}}
-				>
 					<PrimaryButton
+						style={textStyles}
 						checked={chartTipe === 2}
 						onClick={() => setChartTipe(2)}
 					>
 						Accumulated Values
 					</PrimaryButton>
-				</Stack.Item>
+				</Stack>
 			</Stack>
 			<Stack
 				style={{
