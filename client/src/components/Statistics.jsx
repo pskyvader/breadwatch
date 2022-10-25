@@ -1,6 +1,7 @@
 import * as React from "react";
 import { LineChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
+import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
 
 import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { useState, useEffect } from "react";
 import { getAllLogs } from "../API/logs";
 import debounce from "../utils/debounce";
 
-const parseData = (data, field) => {
+const parseData = (data, field, frequency) => {
 	return data.map((element) => {
 		return {
 			x: new Date(element.date),
@@ -24,6 +25,8 @@ const Statistics = () => {
 	const [dataset, setDataset] = useState(null);
 	const [height, setHeight] = useState(null);
 	const [width, setWidth] = useState(null);
+	const [frequency, setFrequency] = useState(1);
+
 	useEffect(() => {
 		setDataset(null);
 		getAllLogs().then((response) => {
@@ -34,6 +37,12 @@ const Statistics = () => {
 		});
 	}, [setDataset]);
 
+	const handleFrequency = (newFrequency) => {
+		if (newFrequency !== frequency) {
+			setFrequency(newFrequency);
+		}
+	};
+
 	if (dataset === null) {
 		return (
 			<div>
@@ -43,9 +52,9 @@ const Statistics = () => {
 			</div>
 		);
 	}
-	const data1 = parseData(dataset, "bread");
-	const data2 = parseData(dataset, "cookie");
-	const data3 = parseData(dataset, "cake");
+	const data1 = parseData(dataset, "bread", frequency);
+	const data2 = parseData(dataset, "cookie", frequency);
+	const data3 = parseData(dataset, "cake", frequency);
 
 	const data4 = {
 		chartTitle: "Last month",
@@ -108,6 +117,21 @@ const Statistics = () => {
 
 	return (
 		<div>
+			<Stack
+				horizontal
+				style={{
+					paddingTop: DefaultSpacing.l2,
+					paddingBottom: DefaultSpacing.l2,
+				}}
+				disableShrink
+				wrap
+			>
+				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+					<DefaultButton onClick={() => handleFrequency(10)}>
+						10
+					</DefaultButton>
+				</Stack.Item>
+			</Stack>
 			<Stack
 				style={{
 					padding: DefaultSpacing.l2,
