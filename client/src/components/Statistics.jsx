@@ -1,10 +1,9 @@
-import * as React from "react";
 import { LineChart, AreaChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
-import { DefaultButton } from "@fluentui/react/lib/Button";
+import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
 
 import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { getAllLogs } from "../API/logs";
 import debounce from "../utils/debounce";
@@ -40,7 +39,6 @@ const groupData = (data, frequency) => {
 		}
 		return undefined;
 	}, {});
-	console.log(groupedData);
 
 	return groupedData;
 };
@@ -67,7 +65,6 @@ const processData = (groupedData, frequency) => {
 		}
 	}
 
-	console.log(proccessedData);
 	return proccessedData;
 };
 
@@ -82,6 +79,28 @@ const parseData = (data, field) => {
 	});
 };
 
+const handleResize = (width, height, margins) => {
+	const size = { w: width, h: height };
+	if (window.innerWidth !== width) {
+		size.w = Math.max(
+			window.innerWidth -
+				margins.left -
+				margins.right -
+				parseInt(DefaultSpacing.l2) * 4,
+			300
+		);
+	}
+	if (window.innerHeight !== height) {
+		size.h = Math.max(
+			window.innerHeight -
+				margins.top -
+				margins.bottom -
+				parseInt(DefaultSpacing.l2) * 8,
+			300
+		);
+	}
+	return size;
+};
 // functional component for statistics
 const Statistics = () => {
 	const [dataset, setDataset] = useState(null);
@@ -89,7 +108,12 @@ const Statistics = () => {
 	const [width, setWidth] = useState(null);
 	const [frequency, setFrequency] = useState(_DAYLY_);
 	const [chartTipe, setChartTipe] = useState(1);
+	console.log(width);
 
+	const margins = useMemo(
+		() => ({ left: 35, top: 20, bottom: 35, right: 20 }),
+		[]
+	);
 	useEffect(() => {
 		setDataset(null);
 		getAllLogs().then((response) => {
@@ -98,13 +122,33 @@ const Statistics = () => {
 			}
 			setDataset(response);
 		});
-	}, [setDataset]);
+		window.addEventListener(
+			"resize",
+			debounce(() => {
+				const { w, h } = handleResize(width, height, margins);
+				if (w !== width) {
+					setWidth(w);
+				}
+				if (h !== height) {
+					setHeight(h);
+				}
+			}),
+			500
+		);
+	}, [setDataset, width, height, margins]);
 
 	const handleFrequency = (newFrequency) => {
 		if (newFrequency !== frequency) {
 			setFrequency(newFrequency);
 		}
 	};
+
+	const groupedData = useMemo(() => {
+		groupData(dataset, frequency);
+	}, [dataset, frequency]);
+	const proccessedData = useMemo(() => {
+		processData(groupedData, frequency);
+	}, [groupedData, frequency]);
 
 	if (dataset === null) {
 		return (
@@ -115,9 +159,6 @@ const Statistics = () => {
 			</div>
 		);
 	}
-
-	const groupedData = groupData(dataset, frequency);
-	const proccessedData = processData(groupedData, frequency);
 
 	const data1 = parseData(proccessedData, "bread");
 	const data2 = parseData(proccessedData, "cookie");
@@ -144,8 +185,6 @@ const Statistics = () => {
 		],
 	};
 
-	const margins = { left: 35, top: 20, bottom: 35, right: 20 };
-
 	const rootStyle = {
 		// width: width + margins.left + margins.right,
 		// height: height + margins.top + margins.bottom,
@@ -153,47 +192,30 @@ const Statistics = () => {
 		height: height,
 	};
 
-	const handleResize = () => {
-		if (window.innerWidth !== width) {
-			setWidth(
-				Math.max(
-					window.innerWidth -
-						margins.left -
-						margins.right -
-						parseInt(DefaultSpacing.l2) * 4,
-					300
-				)
-			);
-		}
-		if (window.innerHeight !== height) {
-			setHeight(
-				Math.max(
-					window.innerHeight -
-						margins.top -
-						margins.bottom -
-						parseInt(DefaultSpacing.l2) * 6,
-					300
-				)
-			);
-		}
-	};
-	window.addEventListener("resize", debounce(handleResize, 500));
-	if (width === null || height === null) {
-		handleResize();
-	}
+	// if (width === null || height === null) {
+	// 	handleResize();
+	// }
 
 	return (
 		<div>
 			<Stack
 				horizontal
-				style={{
-					paddingTop: DefaultSpacing.l2,
-					paddingBottom: DefaultSpacing.l2,
-				}}
+				style={
+					{
+						// paddingTop: DefaultSpacing.l1,
+						// paddingBottom: DefaultSpacing.l2,
+					}
+				}
 				disableShrink
 				wrap
 			>
-				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+				<Stack.Item
+					grow={1}
+					style={{
+						justifyContent: "left",
+						paddingTop: DefaultSpacing.l1,
+					}}
+				>
 					<DefaultButton
 						checked={frequency === _DAYLY_}
 						onClick={() => handleFrequency(_DAYLY_)}
@@ -201,7 +223,13 @@ const Statistics = () => {
 						{_DAYLY_}
 					</DefaultButton>
 				</Stack.Item>
-				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+				<Stack.Item
+					grow={1}
+					style={{
+						justifyContent: "left",
+						paddingTop: DefaultSpacing.l1,
+					}}
+				>
 					<DefaultButton
 						checked={frequency === _WEEKLY_}
 						onClick={() => handleFrequency(_WEEKLY_)}
@@ -209,7 +237,13 @@ const Statistics = () => {
 						{_WEEKLY_}
 					</DefaultButton>
 				</Stack.Item>
-				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
+				<Stack.Item
+					grow={1}
+					style={{
+						justifyContent: "left",
+						paddingTop: DefaultSpacing.l1,
+					}}
+				>
 					<DefaultButton
 						checked={frequency === _MONTHLY_}
 						onClick={() => handleFrequency(_MONTHLY_)}
@@ -217,32 +251,33 @@ const Statistics = () => {
 						{_MONTHLY_}
 					</DefaultButton>
 				</Stack.Item>
-			</Stack>
-
-			<Stack
-				horizontal
-				// style={{
-				// 	paddingTop: DefaultSpacing.l2,
-				// 	paddingBottom: DefaultSpacing.l2,
-				// }}
-				disableShrink
-				wrap
-			>
-				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
-					<DefaultButton
+				<Stack.Item
+					grow={1}
+					style={{
+						justifyContent: "right",
+						paddingTop: DefaultSpacing.l1,
+					}}
+				>
+					<PrimaryButton
 						checked={chartTipe === 1}
 						onClick={() => setChartTipe(1)}
 					>
 						Unique Values
-					</DefaultButton>
+					</PrimaryButton>
 				</Stack.Item>
-				<Stack.Item grow={1} style={{ justifyContent: "left" }}>
-					<DefaultButton
+				<Stack.Item
+					grow={1}
+					style={{
+						justifyContent: "right",
+						paddingTop: DefaultSpacing.l1,
+					}}
+				>
+					<PrimaryButton
 						checked={chartTipe === 2}
 						onClick={() => setChartTipe(2)}
 					>
 						Accumulated Values
-					</DefaultButton>
+					</PrimaryButton>
 				</Stack.Item>
 			</Stack>
 			<Stack

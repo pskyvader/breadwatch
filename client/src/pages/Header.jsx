@@ -12,7 +12,7 @@ const Header = () => {
 			style={{
 				backgroundColor: NeutralColors.gray10,
 				padding: DefaultSpacing.l2,
-				// marginBottom: DefaultSpacing.l2,
+				paddingTop: 0,
 				minHeight: `calc(100vh - ${DefaultSpacing.l2} - ${DefaultSpacing.l2})`,
 			}}
 		>
