@@ -1,11 +1,20 @@
 require("dotenv").config();
+// const http = require("http");
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const pgSession = require("connect-pg-simple")(session);
 const { connection } = require("./database");
 
-const {getAllLogs, getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK } = require("./api");
+const {
+	getAllLogs,
+	getLogs,
+	updateLogs,
+	BREAD,
+	CAKE,
+	COOKIE,
+	WALK,
+} = require("./api");
 
 connection();
 
@@ -48,38 +57,70 @@ app.get("/log/get/:date?", async (req, res) => {
 });
 
 app.get("/bread/add/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), BREAD, 1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		BREAD,
+		1
+	);
 	res.json(result);
 });
 app.get("/bread/remove/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), BREAD, -1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		BREAD,
+		-1
+	);
 	res.json(result);
 });
 
 app.get("/cake/add/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), CAKE, 1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		CAKE,
+		1
+	);
 	res.json(result);
 });
 app.get("/cake/remove/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), CAKE, -1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		CAKE,
+		-1
+	);
 	res.json(result);
 });
 
 app.get("/cookie/add/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), COOKIE, 1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		COOKIE,
+		1
+	);
 	res.json(result);
 });
 app.get("/cookie/remove/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), COOKIE, -1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		COOKIE,
+		-1
+	);
 	res.json(result);
 });
 
 app.get("/walk/true/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), WALK, 1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		WALK,
+		1
+	);
 	res.json(result);
 });
 app.get("/walk/false/:date?", async (req, res) => {
-	const result = await updateLogs(parseInt(req.params.date)  || Date.now(), WALK, -1);
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		WALK,
+		-1
+	);
 	res.json(result);
 });
 
@@ -91,8 +132,17 @@ app.get("*", (req, res) => {
 });
 
 // if not in production use the port 5000
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-	console.log(`Server listening on ${PORT}`);
-});
+// app.listen(PORT, () => {
+// 	console.log(`Server listening on ${PORT}`);
+// });
+
+// app.set("port", PORT);
+
+// const server = http.createServer(app);
+// server.listen(app.get("port"), () => {
+// 	console.log("Express server listening on port " + app.get("port"));
+// });
+
+module.exports = app;
