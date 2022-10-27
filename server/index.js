@@ -145,4 +145,4 @@ app.get("*", (req, res) => {
 // 	console.log("Express server listening on port " + app.get("port"));
 // });
 
-module.exports = app;
+module.exports = { app };
