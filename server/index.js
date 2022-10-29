@@ -1,5 +1,4 @@
 require("dotenv").config();
-// const http = require("http");
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -137,12 +136,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log(`Server listening on ${PORT}`);
 });
-
-// app.set("port", PORT);
-
-// const server = http.createServer(app);
-// server.listen(app.get("port"), () => {
-// 	console.log("Express server listening on port " + app.get("port"));
-// });
-
-module.exports = { app };
