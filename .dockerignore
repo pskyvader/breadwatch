@@ -1,4 +1,8 @@
-Dockerfile
+.autogit
+.secret
+.env
 .dockerignore
+
+Dockerfile
 node_modules
 .git
