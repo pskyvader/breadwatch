@@ -24,11 +24,11 @@ app.use(
 			createTableIfMissing: true,
 			conObject: {
 				connectionString: process.env.DATABASE_URL,
-				ssl: {
-					// require: true,
-					sslmode: "require",
-					rejectUnauthorized: false,
-				},
+				// ssl: {
+				// 	// require: true,
+				// 	sslmode: "require",
+				// 	rejectUnauthorized: false,
+				// },
 			},
 		}),
 		secret: process.env.SESSION_SECRET,

@@ -4,13 +4,13 @@ const { LogsConfiguration } = require("./logs");
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	// dialect: 'postgres',
 	// protocol: 'postgres',
-	dialectOptions: {
-		ssl: {
-			// require: true,
-			sslmode: "require",
-			rejectUnauthorized: false,
-		},
-	},
+	// dialectOptions: {
+	// 	ssl: {
+	// 		// require: true,
+	// 		sslmode: "require",
+	// 		rejectUnauthorized: false,
+	// 	},
+	// },
 	// logging: (...msg) => console.log(msg),
 	// logging: console.log,
 	logging: false,
