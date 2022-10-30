@@ -1,7 +1,7 @@
 const { Sequelize, Model } = require("sequelize");
 const { LogsConfiguration } = require("./logs");
 
-const sequelize = new Sequelize(process.env.DATABASE_URL + "?sslmode=require", {
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	// dialect: 'postgres',
 	// protocol: 'postgres',
 	dialectOptions: {
@@ -29,7 +29,7 @@ const connection = async () => {
 		// await sequelize.sync({ force: true });
 		// console.log("Force Sync successful.");
 		// sequelize.sync({ alter: true });
-		// sequelize.sync();
+		sequelize.sync();
 	} catch (error) {
 		console.error("Unable to connect to the database:", error.message);
 	}
