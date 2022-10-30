@@ -6,6 +6,7 @@ kill_timeout = 5
 processes = []
 
 [env]
+  SESSION_SECRET="7c9431a4i98517aebe81e6c817ac3ae33"
 
 [experimental]
   allowed_public_ports = []

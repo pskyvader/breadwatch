@@ -26,6 +26,7 @@ app.use(
 				connectionString: process.env.DATABASE_URL,
 				ssl: {
 					// require: true,
+					sslmode: "require",
 					rejectUnauthorized: false,
 				},
 			},
