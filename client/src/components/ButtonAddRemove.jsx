@@ -10,6 +10,7 @@ import {
 	removeCake,
 	removeCookie,
 } from "../API/logs";
+import { getColor } from "../utils/getColor";
 
 const BREAD = "bread";
 const CAKE = "cake";
@@ -59,6 +60,8 @@ const remove = async (element, setLogs, date) => {
 
 const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 	const quantity = (logs && logs[element]) || 0;
+	const color = getColor(element, quantity);
+
 	return (
 		<Stack.Item grow={1} styles={stackItemStyles}>
 			<Stack styles={stackItemStyles}>
@@ -66,6 +69,7 @@ const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 					style={{
 						fontSize: FontSizes.size16,
 						fontWeight: FontWeights.regular,
+						color: color,
 					}}
 				>
 					{element}
