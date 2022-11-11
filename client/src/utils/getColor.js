@@ -14,8 +14,14 @@ dangerList[BREAD] = 8;
 dangerList[CAKE] = 4;
 dangerList[COOKIE] = 2;
 
+const SuccessList = {};
+dangerList[BREAD] = 2;
+dangerList[CAKE] = 0;
+dangerList[COOKIE] = 0;
+
 const colorList = {
 	normal: DefaultPalette.neutralPrimary,
+	success: DefaultPalette.green,
 	warning: DefaultPalette.yellow,
 	danger: DefaultPalette.red,
 };
@@ -26,6 +32,9 @@ const getColor = (element, value) => {
 	}
 	if (value > warningList[element]) {
 		return colorList.warning;
+	}
+	if (value > SuccessList[element]) {
+		return colorList.success;
 	}
 	return colorList.normal;
 };
