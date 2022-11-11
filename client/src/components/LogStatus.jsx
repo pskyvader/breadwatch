@@ -14,6 +14,7 @@ import {
 } from "@fluentui/theme";
 import { Stack, Shimmer } from "@fluentui/react";
 import { getLogs } from "../API/logs";
+import getColor from "../utils/getColor";
 const stackItemStyles = {
 	root: { alignItems: "center", display: "flex", justifyContent: "center" },
 };
@@ -28,7 +29,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 			setLogs(response);
 		});
 	}, [setLogs, date]);
-	
+
 	const childrenWithProps = Children.map(children, (child) => {
 		if (isValidElement(child)) {
 			return cloneElement(child, { logs, setLogs, date });
@@ -74,6 +75,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
+								color: getColor("bread", logs.bread),
 							}}
 						>
 							Bread: {logs && logs.bread}
@@ -84,6 +86,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
+								color: getColor("cookie", logs.cookie),
 							}}
 						>
 							Cookie: {logs && logs.cookie}
@@ -94,6 +97,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
+								color: getColor("cake", logs.cake),
 							}}
 						>
 							Cake: {logs && logs.cake}
