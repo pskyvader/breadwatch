@@ -1,6 +1,7 @@
 import { Stack } from "@fluentui/react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { FontSizes, FontWeights } from "@fluentui/theme";
+import getColor from "../utils/getColor";
 
 import {
 	addBread,
@@ -10,7 +11,6 @@ import {
 	removeCake,
 	removeCookie,
 } from "../API/logs";
-import { getColor } from "../utils/getColor";
 
 const BREAD = "bread";
 const CAKE = "cake";
@@ -83,7 +83,14 @@ const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 					/>
 				</div>
 				<div>
-					<div className="quantity">{quantity}</div>
+					<div
+						className="quantity"
+						style={{
+							color: color,
+						}}
+					>
+						{quantity}
+					</div>
 				</div>
 				<div className="button-remove">
 					<IconButton
