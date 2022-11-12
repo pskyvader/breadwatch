@@ -24,38 +24,44 @@ const stackItemStyles = {
 	},
 };
 
-const add = async (element, setLogs, date) => {
-	let response;
+const add = (element, setLogs, date) => {
+	let action;
 	if (element === BREAD) {
-		response = await addBread(date);
+		action = addBread(date);
 	}
 	if (element === CAKE) {
-		response = await addCake(date);
+		action = addCake(date);
 	}
 	if (element === COOKIE) {
-		response = await addCookie(date);
+		action = addCookie(date);
 	}
-	if (response.error) {
-		return false;
-	}
-	setLogs(response);
+
+	action.then((response) => {
+		if (response.error) {
+			return false;
+		}
+		setLogs(response);
+	});
 };
 
-const remove = async (element, setLogs, date) => {
-	let response;
+const remove = (element, setLogs, date) => {
+	let action;
 	if (element === BREAD) {
-		response = await removeBread(date);
+		action = removeBread(date);
 	}
 	if (element === CAKE) {
-		response = await removeCake(date);
+		action = removeCake(date);
 	}
 	if (element === COOKIE) {
-		response = await removeCookie(date);
+		action = removeCookie(date);
 	}
-	if (response.error) {
-		return false;
-	}
-	setLogs(response);
+
+	action.then((response) => {
+		if (response.error) {
+			return false;
+		}
+		setLogs(response);
+	});
 };
 
 const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
@@ -79,7 +85,7 @@ const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 						iconProps={{ iconName: "Add" }}
 						title={`add 1 ${element}`}
 						ariaLabel={`add 1 ${element}`}
-						onClick={async () => add(element, setLogs, date)}
+						onClick={() => add(element, setLogs, date)}
 					/>
 				</div>
 				<div>
@@ -97,7 +103,7 @@ const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 						iconProps={{ iconName: "Remove" }}
 						title={`remove 1 ${element}`}
 						ariaLabel={`remove 1 ${element}`}
-						onClick={async () => remove(element, setLogs, date)}
+						onClick={() => remove(element, setLogs, date)}
 					/>
 				</div>
 			</Stack>

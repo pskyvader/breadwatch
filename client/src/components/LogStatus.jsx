@@ -78,7 +78,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 								color: getColor("bread", logs.bread),
 							}}
 						>
-							Bread: {logs && logs.bread}
+							Bread: {logs.bread}
 						</div>
 					</Stack.Item>
 					<Stack.Item grow={1} styles={stackItemStyles}>
