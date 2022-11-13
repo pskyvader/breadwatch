@@ -15,9 +15,9 @@ warningList[CAKE] = 2;
 warningList[COOKIE] = 1;
 
 const SuccessList = {};
-dangerList[BREAD] = 2;
-dangerList[CAKE] = 0;
-dangerList[COOKIE] = 0;
+SuccessList[BREAD] = 2;
+SuccessList[CAKE] = 0;
+SuccessList[COOKIE] = 0;
 
 const colorList = {
 	normal: DefaultPalette.neutralPrimary,
@@ -28,7 +28,6 @@ const colorList = {
 
 const getColor = (element, value) => {
 	value = parseInt(value);
-	console.log(value, dangerList[element]);
 	if (value > dangerList[element]) {
 		return colorList.danger;
 	}
