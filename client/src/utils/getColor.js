@@ -27,6 +27,7 @@ const colorList = {
 };
 
 const getColor = (element, value) => {
+	value = parseFloat(value);
 	if (value > dangerList[element]) {
 		return colorList.danger;
 	}
