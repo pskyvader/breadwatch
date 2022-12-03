@@ -28,6 +28,16 @@ const LogsConfiguration = {
 		allowNull: false,
 		defaultValue: 0,
 	},
+	fruit: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+		defaultValue: 0,
+	},
+	vegetable: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+		defaultValue: 0,
+	},
 	walk: {
 		type: DataTypes.BOOLEAN,
 		allowNull: false,

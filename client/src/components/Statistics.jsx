@@ -56,8 +56,7 @@ const processData = (groupedData, frequency) => {
 					prev.date = e.date;
 				}
 				for (const product of products) {
-					prev[product] =
-						(prev[product] || 0) + e[product] / element.length;
+					prev[product] = (prev[product] || 0) + e[product] ; //total     / element.length;
 				}
 				return prev;
 			}, {});
