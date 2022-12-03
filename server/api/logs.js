@@ -57,6 +57,8 @@ const getLogs = async (date = Date.now()) => {
 		where: {
 			date: date,
 		},
+	}).catch((err) => {
+		return { error: true, message: "find One log error:" + err.message };
 	});
 	if (logs === null) {
 		return Logs.create({ date: date }).catch((err) => {
