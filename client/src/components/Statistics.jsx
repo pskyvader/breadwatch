@@ -4,6 +4,7 @@ import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
 
 import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
 import { useState, useEffect, useMemo } from "react";
+import { BREAD, COOKIE, CAKE, FRUIT, VEGETABLE } from "../constants";
 
 import { getAllLogs } from "../API/logs";
 import debounce from "../utils/debounce";
@@ -13,7 +14,7 @@ const _DAYLY_ = "dayly";
 const _WEEKLY_ = "weekly";
 const _MONTHLY_ = "monthly";
 
-const products = ["bread", "cookie", "cake"];
+const products = [BREAD, COOKIE, CAKE, FRUIT, VEGETABLE];
 
 const groupData = (data, frequency) => {
 	if (frequency === _DAYLY_) {
@@ -56,7 +57,7 @@ const processData = (groupedData, frequency) => {
 					prev.date = e.date;
 				}
 				for (const product of products) {
-					prev[product] = (prev[product] || 0) + e[product] ; //total     / element.length;
+					prev[product] = (prev[product] || 0) + e[product]; //total     / element.length;
 				}
 				return prev;
 			}, {});
@@ -152,27 +153,39 @@ const Statistics = () => {
 		}
 		const groupedData = groupData(dataset, frequency);
 		const proccessedData = processData(groupedData, frequency);
-		const data1 = parseData(proccessedData, "bread");
-		const data2 = parseData(proccessedData, "cookie");
-		const data3 = parseData(proccessedData, "cake");
+		const dataBread = parseData(proccessedData, BREAD);
+		const dataCookie = parseData(proccessedData, COOKIE);
+		const dataCake = parseData(proccessedData, CAKE);
+		const dataFruit = parseData(proccessedData, FRUIT);
+		const dataVegetable = parseData(proccessedData, VEGETABLE);
 
 		return {
 			chartTitle: "Last month",
 			lineChartData: [
 				{
-					data: data1,
-					legend: "Bread",
+					data: dataBread,
+					legend: BREAD,
 					color: DefaultPalette.blue,
 				},
 				{
-					data: data2,
-					legend: "Cookie",
+					data: dataCookie,
+					legend: COOKIE,
 					color: DefaultPalette.green,
 				},
 				{
-					data: data3,
-					legend: "Cake",
+					data: dataCake,
+					legend: CAKE,
 					color: DefaultPalette.red,
+				},
+				{
+					data: dataFruit,
+					legend: CAKE,
+					color: DefaultPalette.magenta,
+				},
+				{
+					data: dataVegetable,
+					legend: CAKE,
+					color: DefaultPalette.orange,
 				},
 			],
 		};
@@ -206,10 +219,12 @@ const Statistics = () => {
 		<div>
 			<Stack
 				horizontal
-				style={{
-					// paddingTop: DefaultSpacing.l1,
-					// paddingBottom: DefaultSpacing.l2,
-				}}
+				style={
+					{
+						// paddingTop: DefaultSpacing.l1,
+						// paddingBottom: DefaultSpacing.l2,
+					}
+				}
 				disableShrink
 				wrap
 			>

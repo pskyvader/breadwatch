@@ -36,6 +36,24 @@ export const removeCake = (date = "") => {
 	return request(url);
 };
 
+export const addFruit = (date = "") => {
+	const url = `/fruit/add/${date}`;
+	return request(url);
+};
+export const removeFruit = (date = "") => {
+	const url = `/fruit/remove/${date}`;
+	return request(url);
+};
+
+export const addVegetable = (date = "") => {
+	const url = `/vegetable/add/${date}`;
+	return request(url);
+};
+export const removeVegetable = (date = "") => {
+	const url = `/vegetable/remove/${date}`;
+	return request(url);
+};
+
 export const walkTrue = (date = "") => {
 	const url = `/walk/true/${date}`;
 	return request(url);

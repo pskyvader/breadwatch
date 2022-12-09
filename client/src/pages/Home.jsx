@@ -4,12 +4,9 @@ import { DefaultButton } from "@fluentui/react/lib/Button";
 import { DefaultSpacing } from "@fluentui/theme";
 
 import { Stack } from "@fluentui/react";
-import {
-	ButtonAddRemove,
-	BREAD,
-	CAKE,
-	COOKIE,
-} from "../components/ButtonAddRemove";
+import { ButtonAddRemove } from "../components/ButtonAddRemove";
+import { BREAD, CAKE, COOKIE, FRUIT, VEGETABLE } from "../constants";
+
 import LogStatus from "../components/LogStatus";
 
 import { ButtonToggle, WALK } from "../components/ButtonToggle";
@@ -82,6 +79,8 @@ const Home = () => {
 				<ButtonAddRemove element={BREAD} />
 				<ButtonAddRemove element={COOKIE} />
 				<ButtonAddRemove element={CAKE} />
+				<ButtonAddRemove element={FRUIT} />
+				<ButtonAddRemove element={VEGETABLE} />
 				<ButtonToggle element={WALK} />
 			</LogStatus>
 		</div>

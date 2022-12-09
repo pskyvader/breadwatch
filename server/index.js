@@ -12,6 +12,8 @@ const {
 	BREAD,
 	CAKE,
 	COOKIE,
+	FRUIT,
+	VEGETABLE,
 	WALK,
 } = require("./api");
 
@@ -102,6 +104,40 @@ app.get("/cookie/remove/:date?", async (req, res) => {
 	const result = await updateLogs(
 		parseInt(req.params.date) || Date.now(),
 		COOKIE,
+		-1
+	);
+	res.json(result);
+});
+
+app.get("/fruit/add/:date?", async (req, res) => {
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		FRUIT,
+		1
+	);
+	res.json(result);
+});
+app.get("/fruit/remove/:date?", async (req, res) => {
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		FRUIT,
+		-1
+	);
+	res.json(result);
+});
+
+app.get("/vegetable/add/:date?", async (req, res) => {
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		VEGETABLE,
+		1
+	);
+	res.json(result);
+});
+app.get("/vegetable/remove/:date?", async (req, res) => {
+	const result = await updateLogs(
+		parseInt(req.params.date) || Date.now(),
+		VEGETABLE,
 		-1
 	);
 	res.json(result);

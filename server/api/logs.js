@@ -1,10 +1,12 @@
-const { Op } = require("sequelize");
+// const { Op } = require("sequelize");
 const { Logs } = require("../database");
 
-const BREAD = 1;
-const CAKE = 2;
-const COOKIE = 3;
-const WALK = 4;
+const BREAD = "bread";
+const CAKE = "cake";
+const COOKIE = "cookie";
+const FRUIT = "fruit";
+const VEGETABLE = "vegetable";
+const WALK = "walk";
 
 const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	const logs = await getLogs(date);
@@ -14,39 +16,45 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	let newbread = logs.bread;
 	let newcake = logs.cake;
 	let newcookie = logs.cookie;
+	let newfruit = logs.fruit;
+	let newvegetable = logs.vegetable;
 	let newwalk = logs.walk;
+
 	if (element == BREAD) {
 		newbread = logs.bread + quantity;
-		if (newbread < 0) {
-			newbread = 0;
-		}
 	}
 	if (element == CAKE) {
 		newcake = logs.cake + quantity;
-		if (newcake < 0) {
-			newcake = 0;
-		}
 	}
+
 	if (element == COOKIE) {
 		newcookie = logs.cookie + quantity;
-		if (newcookie < 0) {
-			newcookie = 0;
-		}
 	}
+	if (element == FRUIT) {
+		newfruit = logs.fruit + quantity;
+	}
+	if (element == VEGETABLE) {
+		newvegetable = logs.vegetable + quantity;
+	}
+
 	if (element == WALK) {
 		newwalk = quantity === 1 ? true : false;
 	}
 
 	const updatedLog = await logs.update({
-		bread: newbread,
-		cake: newcake,
-		cookie: newcookie,
+		bread: (newbread >= 0 && newbread) || 0,
+		cake: (newcake >= 0 && newcake) || 0,
+		cookie: (newcookie >= 0 && newcookie) || 0,
+		fruit: (newfruit >= 0 && newfruit) || 0,
+		vegetable: (newvegetable >= 0 && newvegetable) || 0,
 		walk: newwalk,
 	});
 	return {
 		bread: updatedLog.bread,
 		cake: updatedLog.cake,
 		cookie: updatedLog.cookie,
+		fruit: updatedLog.fruit,
+		vegetable: updatedLog.vegetable,
 		walk: updatedLog.walk,
 		date: updatedLog.date,
 	};

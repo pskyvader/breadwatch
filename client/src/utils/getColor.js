@@ -1,23 +1,26 @@
 import { DefaultPalette } from "@fluentui/theme";
-
-const BREAD = "bread";
-const COOKIE = "cookie";
-const CAKE = "cake";
+import { BREAD, COOKIE, CAKE, FRUIT, VEGETABLE } from "../constants";
 
 const dangerList = {};
 dangerList[BREAD] = 8;
 dangerList[COOKIE] = 4;
 dangerList[CAKE] = 2;
+dangerList[FRUIT] = 15;
+dangerList[VEGETABLE] = 20;
 
 const warningList = {};
 warningList[BREAD] = 6;
 warningList[COOKIE] = 2;
 warningList[CAKE] = 1;
+warningList[FRUIT] = 10;
+warningList[VEGETABLE] = 15;
 
 const SuccessList = {};
 SuccessList[BREAD] = 2;
 SuccessList[COOKIE] = 0;
 SuccessList[CAKE] = 0;
+SuccessList[FRUIT] = 4;
+SuccessList[VEGETABLE] = 6;
 
 const colorList = {
 	normal: DefaultPalette.neutralPrimary,

@@ -2,19 +2,20 @@ import { Stack } from "@fluentui/react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { FontSizes, FontWeights } from "@fluentui/theme";
 import getColor from "../utils/getColor";
+import { BREAD, CAKE, COOKIE, FRUIT, VEGETABLE } from "../constants";
 
 import {
 	addBread,
 	addCake,
 	addCookie,
+	addFruit,
+	addVegetable,
 	removeBread,
 	removeCake,
 	removeCookie,
+	removeFruit,
+	removeVegetable,
 } from "../API/logs";
-
-const BREAD = "bread";
-const CAKE = "cake";
-const COOKIE = "cookie";
 
 const stackItemStyles = {
 	root: {
@@ -35,6 +36,12 @@ const add = (element, setLogs, date) => {
 	if (element === COOKIE) {
 		action = addCookie(date);
 	}
+	if (element === FRUIT) {
+		action = addFruit(date);
+	}
+	if (element === VEGETABLE) {
+		action = addVegetable(date);
+	}
 
 	action.then((response) => {
 		if (response.error) {
@@ -54,6 +61,12 @@ const remove = (element, setLogs, date) => {
 	}
 	if (element === COOKIE) {
 		action = removeCookie(date);
+	}
+	if (element === FRUIT) {
+		action = removeFruit(date);
+	}
+	if (element === VEGETABLE) {
+		action = removeVegetable(date);
 	}
 
 	action.then((response) => {

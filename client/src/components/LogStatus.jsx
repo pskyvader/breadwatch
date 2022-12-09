@@ -15,9 +15,13 @@ import {
 import { Stack, Shimmer } from "@fluentui/react";
 import { getLogs } from "../API/logs";
 import getColor from "../utils/getColor";
+
+import { CAKE, COOKIE, BREAD, FRUIT, VEGETABLE } from "../constants";
+
 const stackItemStyles = {
 	root: { alignItems: "center", display: "flex", justifyContent: "center" },
 };
+
 const LogStatus = ({ children, date = Date.now() }) => {
 	const [logs, setLogs] = useState(null);
 	useEffect(() => {
@@ -75,7 +79,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
-								color: getColor("bread", logs.bread),
+								color: getColor(BREAD, logs.bread),
 							}}
 						>
 							Bread: {logs.bread}
@@ -86,7 +90,7 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
-								color: getColor("cookie", logs.cookie),
+								color: getColor(COOKIE, logs.cookie),
 							}}
 						>
 							Cookie: {logs && logs.cookie}
@@ -97,12 +101,35 @@ const LogStatus = ({ children, date = Date.now() }) => {
 							style={{
 								fontSize: FontSizes.size16,
 								fontWeight: FontWeights.semibold,
-								color: getColor("cake", logs.cake),
+								color: getColor(CAKE, logs.cake),
 							}}
 						>
 							Cake: {logs && logs.cake}
 						</div>
 					</Stack.Item>
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+								color: getColor(FRUIT, logs.fruit),
+							}}
+						>
+							Fruits: {logs && logs.fruit}
+						</div>
+					</Stack.Item>
+					<Stack.Item grow={1} styles={stackItemStyles}>
+						<div
+							style={{
+								fontSize: FontSizes.size16,
+								fontWeight: FontWeights.semibold,
+								color: getColor(VEGETABLE, logs.vegetable),
+							}}
+						>
+							Vegetables: {logs && logs.vegetable}
+						</div>
+					</Stack.Item>
+
 					<Stack.Item grow={1} styles={stackItemStyles}>
 						<div
 							style={{
