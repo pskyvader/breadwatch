@@ -1,9 +1,7 @@
-const constants = {
-	BREAD: "bread",
-	COOKIE: "cookie",
-	CAKE: "cake",
-	FRUIT: "fruit",
-	VEGETABLE: "vegetable",
-};
+const BREAD = "bread";
+const COOKIE = "cookie";
+const CAKE = "cake";
+const FRUIT = "fruit";
+const VEGETABLE = "vegetable";
 
-export default constants;
+export { BREAD, COOKIE, CAKE, FRUIT, VEGETABLE };

@@ -42,11 +42,11 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	}
 
 	const updatedLog = await logs.update({
-		bread: (newbread >= 0 && newbread) || 0,
-		cake: (newcake >= 0 && newcake) || 0,
-		cookie: (newcookie >= 0 && newcookie) || 0,
-		fruit: (newfruit >= 0 && newfruit) || 0,
-		vegetable: (newvegetable >= 0 && newvegetable) || 0,
+		bread: newbread >= 0 ? newbread : 0,
+		cake: newcake >= 0 ? newcake : 0,
+		cookie: newcookie >= 0 ? newcookie : 0,
+		fruit: newfruit >= 0 ? newfruit : 0,
+		vegetable: newvegetable >= 0 ? newvegetable : 0,
 		walk: newwalk,
 	});
 	return {
