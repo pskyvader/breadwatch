@@ -45,6 +45,7 @@ const add = (element, setLogs, date) => {
 
 	action.then((response) => {
 		if (response.error) {
+			console.error(response.error, response);
 			return false;
 		}
 		setLogs(response);
@@ -124,4 +125,4 @@ const ButtonAddRemove = ({ element, logs, setLogs, date = Date.now() }) => {
 	);
 };
 
-export { ButtonAddRemove, BREAD, CAKE, COOKIE };
+export { ButtonAddRemove };
