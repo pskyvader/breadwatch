@@ -2,7 +2,7 @@ import { Stack } from "@fluentui/react";
 import { Toggle } from "@fluentui/react/lib/Toggle";
 import { FontSizes, FontWeights } from "@fluentui/theme";
 import { walkTrue, walkFalse } from "../API/logs";
-const WALK = "walk";
+import { WALK } from "../constants";
 const stackItemStyles = {
 	root: { alignItems: "center", display: "flex", justifyContent: "center" },
 };
