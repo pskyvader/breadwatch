@@ -5,4 +5,4 @@ const FRUIT = "fruit";
 const VEGETABLE = "vegetable";
 const WALK = "walk";
 
-export { BREAD, COOKIE, CAKE, FRUIT, VEGETABLE };
+export { BREAD, COOKIE, CAKE, FRUIT, VEGETABLE, WALK };
