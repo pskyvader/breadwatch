@@ -13,6 +13,12 @@ const updateLogs = async (date = Date.now(), element = null, quantity = 1) => {
 	if (logs.error) {
 		return logs;
 	}
+	if (element == null) {
+		return {
+			error: true,
+			message: "Element can't be null when updating logs",
+		};
+	}
 	let newbread = logs.bread;
 	let newcake = logs.cake;
 	let newcookie = logs.cookie;
@@ -86,4 +92,14 @@ const getAllLogs = async () => {
 	return logs;
 };
 
-module.exports = { getAllLogs, getLogs, updateLogs, BREAD, CAKE, COOKIE, WALK };
+module.exports = {
+	getAllLogs,
+	getLogs,
+	updateLogs,
+	BREAD,
+	CAKE,
+	COOKIE,
+	WALK,
+	FRUIT,
+	VEGETABLE,
+};
