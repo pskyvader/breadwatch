@@ -210,12 +210,12 @@ const Statistics = () => {
 				},
 				{
 					data: dataFruit,
-					legend: CAKE,
+					legend: FRUIT,
 					color: DefaultPalette.magenta,
 				},
 				{
 					data: dataVegetable,
-					legend: CAKE,
+					legend: VEGETABLE,
 					color: DefaultPalette.orange,
 				},
 			],
