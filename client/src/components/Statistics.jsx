@@ -1,6 +1,7 @@
 import { LineChart, AreaChart } from "@fluentui/react-charting";
 import { Stack, Shimmer, DefaultPalette } from "@fluentui/react";
 import { DefaultButton, PrimaryButton } from "@fluentui/react/lib/Button";
+import { Dropdown } from "@fluentui/react/lib/Dropdown";
 
 import { Depths, DefaultSpacing, NeutralColors } from "@fluentui/theme";
 import { useState, useEffect, useMemo } from "react";
@@ -17,10 +18,21 @@ const _MONTHLY_ = "monthly";
 const products = [BREAD, COOKIE, CAKE, FRUIT, VEGETABLE];
 
 const filterData = (data, date = null) => {
-	if (date === null) return data;
+	if (!date || date.key === null) return data;
+	const currentDate = new Date();
+	if (date.key === "year") {
+		currentDate.setFullYear(currentDate.getFullYear() - 1);
+	}
+	if (date.key === "month") {
+		currentDate.setMonth(currentDate.getMonth() - 1);
+	}
+	if (date.key === "week") {
+		currentDate.setDate(currentDate.getDate() - 1);
+	}
+
 	const filteredData = data.filter((element) => {
 		const parsedDate = new Date(element.date);
-		return parsedDate > date;
+		return parsedDate > currentDate;
 	});
 	return filteredData;
 };
@@ -159,6 +171,12 @@ const Statistics = () => {
 		}
 	};
 
+	const handleFilterDate = (_event, newFilterDate) => {
+		if (newFilterDate !== filterDate) {
+			setFilterDate(newFilterDate);
+		}
+	};
+
 	const chartData = useMemo(() => {
 		if (dataset === null) {
 			return null;
@@ -202,7 +220,7 @@ const Statistics = () => {
 				},
 			],
 		};
-	}, [dataset, frequency]);
+	}, [dataset, frequency, filterDate]);
 
 	if (dataset === null) {
 		return (
@@ -227,6 +245,13 @@ const Statistics = () => {
 		marginRight: DefaultSpacing.l1,
 		marginTop: DefaultSpacing.l1,
 	};
+
+	const FilterDateOptions = [
+		{ key: "all", text: "All" },
+		{ key: "year", text: "Last Year" },
+		{ key: "month", text: "Last Month" },
+		{ key: "week", text: "Last Week" },
+	];
 
 	return (
 		<div>
@@ -270,6 +295,23 @@ const Statistics = () => {
 						{_MONTHLY_}
 					</DefaultButton>
 				</Stack>
+
+				<Stack
+					horizontal
+					disableShrink
+					wrap
+					grow={1}
+					// style={textStyles}
+				>
+					<Dropdown
+						label="Filter From Date"
+						selectedKey={filterDate ? filterDate.key : undefined}
+						placeholder="Select an option"
+						onChange={handleFilterDate}
+						options={FilterDateOptions}
+					/>
+				</Stack>
+
 				<Stack
 					horizontal
 					disableShrink
