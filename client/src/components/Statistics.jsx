@@ -18,7 +18,7 @@ const _MONTHLY_ = "monthly";
 const products = [BREAD, COOKIE, CAKE, FRUIT, VEGETABLE];
 
 const filterData = (data, date = null) => {
-	if (!date || date.key === null) return data;
+	if (!date || date.key === "all") return data;
 	const currentDate = new Date();
 	if (date.key === "year") {
 		currentDate.setFullYear(currentDate.getFullYear() - 1);
@@ -27,7 +27,7 @@ const filterData = (data, date = null) => {
 		currentDate.setMonth(currentDate.getMonth() - 1);
 	}
 	if (date.key === "week") {
-		currentDate.setDate(currentDate.getDate() - 1);
+		currentDate.setDate(currentDate.getDate() - 7);
 	}
 
 	const filteredData = data.filter((element) => {
@@ -304,11 +304,12 @@ const Statistics = () => {
 					// style={textStyles}
 				>
 					<Dropdown
-						label="Filter From Date"
+						// label="Filter From Date"
 						selectedKey={filterDate ? filterDate.key : undefined}
-						placeholder="Select an option"
+						placeholder="Filter From Date"
 						onChange={handleFilterDate}
 						options={FilterDateOptions}
+						style={textStyles}
 					/>
 				</Stack>
 
