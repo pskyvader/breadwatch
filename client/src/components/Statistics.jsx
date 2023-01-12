@@ -16,6 +16,15 @@ const _MONTHLY_ = "monthly";
 
 const products = [BREAD, COOKIE, CAKE, FRUIT, VEGETABLE];
 
+const filterData = (data, date = null) => {
+	if (date === null) return data;
+	const filteredData = data.filter((element) => {
+		const parsedDate = new Date(element.date);
+		return parsedDate > date;
+	});
+	return filteredData;
+};
+
 const groupData = (data, frequency) => {
 	if (frequency === _DAYLY_) {
 		return data;
@@ -110,6 +119,7 @@ const Statistics = () => {
 	const [width, setWidth] = useState(null);
 	const [frequency, setFrequency] = useState(_DAYLY_);
 	const [chartTipe, setChartTipe] = useState(1);
+	const [filterDate, setFilterDate] = useState(null);
 
 	const margins = useMemo(
 		() => ({ left: 35, top: 20, bottom: 35, right: 20 }),
@@ -153,7 +163,8 @@ const Statistics = () => {
 		if (dataset === null) {
 			return null;
 		}
-		const groupedData = groupData(dataset, frequency);
+		const filteredData = filterData(dataset, filterDate);
+		const groupedData = groupData(filteredData, frequency);
 		const proccessedData = processData(groupedData, frequency);
 		const dataBread = parseData(proccessedData, BREAD);
 		const dataCookie = parseData(proccessedData, COOKIE);
