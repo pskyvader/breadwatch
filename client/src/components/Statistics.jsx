@@ -23,7 +23,8 @@ const groupData = (data, frequency) => {
 	const groupedData = data.reduce((previous, element) => {
 		const parsedDate = new Date(element.date);
 		if (frequency === _WEEKLY_) {
-			const week = getWeekYear(parsedDate);
+			const week =
+				parsedDate.getFullYear() + "-" + getWeekYear(parsedDate);
 			if (!previous[week]) {
 				previous[week] = [];
 			}
@@ -31,7 +32,8 @@ const groupData = (data, frequency) => {
 			return previous;
 		}
 		if (frequency === _MONTHLY_) {
-			const month = parsedDate.getMonth();
+			const month =
+				parsedDate.getFullYear() + "-" + parsedDate.getMonth();
 			if (!previous[month]) {
 				previous[month] = [];
 			}
