@@ -350,7 +350,7 @@ const Statistics = () => {
 							height={height}
 							width={width}
 							data={chartData}
-							tickFormat={"%m/%d"}
+							tickFormat={"%y - %m/%d"}
 							margins={margins}
 							allowMultipleShapesForPoints={true}
 							xAxisTickCount={10}
@@ -361,7 +361,7 @@ const Statistics = () => {
 							height={height}
 							width={width}
 							data={chartData}
-							tickFormat={"%m/%d"}
+							tickFormat={"%y - %m/%d"}
 							margins={margins}
 						/>
 					)}
