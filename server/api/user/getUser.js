@@ -9,9 +9,19 @@ const getUser = (idUser = null, email = null) => {
 
 	return User.findOne({
 		where: where,
-	}).catch((err) => {
-		return { error: true, message: "Get user error: " + err.message };
-	});
+	})
+		.then((user) => {
+			if (user === null) {
+				return {
+					error: true,
+					message: "User not found",
+				};
+			}
+			return user;
+		})
+		.catch((err) => {
+			return { error: true, message: "Get user error: " + err.message };
+		});
 };
 
 const getUserByPassword = (email = null, password = null) => {
@@ -30,6 +40,7 @@ const getUserByPassword = (email = null, password = null) => {
 			}
 			return bcrypt.compare(password, user.password).then((res) => {
 				if (res === true) {
+					console.log("return true");
 					return user;
 				}
 				return {
