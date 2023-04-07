@@ -1,5 +1,8 @@
 const { Sequelize, Model } = require("sequelize");
 const { LogsConfiguration } = require("./logs");
+const { UserConfiguration } = require("./user");
+const { ProductConfiguration } = require("./product");
+const { HistoryConfiguration } = require("./history");
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	// dialect: 'postgres',
@@ -23,6 +26,39 @@ Logs.init(LogsConfiguration, {
 	// modelName: "Logs", // We need to choose the model name
 });
 
+class User extends Model {}
+User.init(UserConfiguration, {
+	// Other model options go here
+	sequelize, // We need to pass the connection instance
+	// modelName: "Logs", // We need to choose the model name
+});
+
+class Product extends Model {}
+Product.init(ProductConfiguration, {
+	// Other model options go here
+	sequelize, // We need to pass the connection instance
+	// modelName: "Logs", // We need to choose the model name
+});
+
+class History extends Model {}
+History.init(HistoryConfiguration, {
+	// Other model options go here
+	sequelize, // We need to pass the connection instance
+	// modelName: "Logs", // We need to choose the model name
+});
+
+User.belongsToMany(Product, {
+	through: { model: History, unique: false },
+});
+Product.belongsToMany(User, {
+	through: { model: History, unique: false },
+});
+
+User.hasMany(History);
+History.belongsTo(User);
+Product.hasMany(History);
+History.belongsTo(Product);
+
 const connection = async () => {
 	try {
 		await sequelize.authenticate();
@@ -34,4 +70,4 @@ const connection = async () => {
 	}
 };
 
-module.exports = { connection, Logs };
+module.exports = { connection, Logs, User, History, Product };

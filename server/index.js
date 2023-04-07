@@ -160,6 +160,9 @@ app.get("/walk/false/:date?", async (req, res) => {
 	res.json(result);
 });
 
+app.get("*.*", (req, res) => {
+	res.sendStatus(404);
+});
 app.get("*", (req, res) => {
 	console.log(req.params);
 	res.sendFile(
