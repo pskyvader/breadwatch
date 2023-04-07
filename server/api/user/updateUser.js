@@ -3,7 +3,10 @@ const { hashPassword } = require("./hashPassword");
 const updateUser = async (user, fields) => {
 	if (
 		!user ||
-		(!fields.name && !fields.email && !fields.password && !fields.active)
+		(!fields.name &&
+			!fields.email &&
+			!fields.password &&
+			fields.active === undefined)
 	) {
 		return { error: true, message: "Missing required fields" };
 	}
@@ -22,11 +25,13 @@ const updateUser = async (user, fields) => {
 		}
 		updateFields.password = hashedPassword;
 	}
-	if (fields.active) {
+	if (fields.active !== undefined) {
 		updateFields.active = fields.active;
 	}
+	console.log(user, updateFields);
 
 	return user.update(updateFields).catch((err) => {
+		console.log("err", err);
 		return {
 			error: true,
 			message: "Update user error: " + err.message,

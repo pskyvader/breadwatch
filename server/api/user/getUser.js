@@ -40,7 +40,7 @@ const getUserByPassword = (email = null, password = null) => {
 			}
 			return bcrypt.compare(password, user.password).then((res) => {
 				if (res === true) {
-					console.log("return true");
+					delete user.password;
 					return user;
 				}
 				return {

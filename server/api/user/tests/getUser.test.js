@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { User } = require("../../../database");
 const { getUser, getUserByPassword, getAllUsers } = require("../getUser");
+const { hashPassword } = require("../hashPassword");
 
 jest.mock("../../../database");
 
@@ -81,28 +82,31 @@ describe("getUserByPassword function", () => {
 		});
 	});
 
-    test("correct email and password", async () => {
-        User.findOne.mockResolvedValueOnce({
-          id: 1,
-          name: "Alice",
-          email: "alice@example.com",
-          password: "$2b$10$6ymv40Q2rybIgYFyxw7H6.wRvukAUpdo8OdtOQrT9T9vE6s86W3qO", // "password"
-        });
-        const result = await getUserByPassword("alice@example.com", "password");
-        expect(result.id).toEqual(1);
-        expect(result.name).toEqual("Alice");
-        expect(result.email).toEqual("alice@example.com");
-        expect(result.password).toBeUndefined();
-      });
-    
+	test("correct email and password", async () => {
+		const password = "password";
+		const hashedPassword = await hashPassword(password);
+		User.findOne.mockResolvedValueOnce({
+			id: 1,
+			name: "Alice",
+			email: "alice@example.com",
+			password: hashedPassword,
+		});
+		const result = await getUserByPassword("alice@example.com", password);
+		expect(result.id).toEqual(1);
+		expect(result.name).toEqual("Alice");
+		expect(result.email).toEqual("alice@example.com");
+		expect(result.password).toBeUndefined();
+	});
 
-
-    test("database error", async () => {
-        const errorMsg = "Database error";
-        User.findOne.mockRejectedValueOnce(new Error(errorMsg));
-        const result = await getUserByPassword("alice@example.com", "password");
-        expect(result).toEqual({ error: true, message: "Get user error: " + errorMsg });
-      });
+	test("database error", async () => {
+		const errorMsg = "Database error";
+		User.findOne.mockRejectedValueOnce(new Error(errorMsg));
+		const result = await getUserByPassword("alice@example.com", "password");
+		expect(result).toEqual({
+			error: true,
+			message: "Get user error: " + errorMsg,
+		});
+	});
 });
 
 describe("getAllUsers function", () => {
