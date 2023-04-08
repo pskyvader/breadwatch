@@ -32,14 +32,12 @@ describe("getUser", () => {
 	});
 
 	test("should return an error message when an invalid user ID is provided", async () => {
-		User.findOne.mockResolvedValueOnce(null); // mock the database function to return null
 		const result = await getUser("invalid_id");
 		expect(result.error).toBe(true);
 		expect(result.message).toBe("Invalid user ID");
 	});
 
 	test("should return an error message when an invalid email is provided", async () => {
-		User.findOne.mockResolvedValueOnce(null); // mock the database function to return null
 		const result = await getUser(null, "invalid_email");
 		expect(result.error).toBe(true);
 		expect(result.message).toBe("Invalid email");

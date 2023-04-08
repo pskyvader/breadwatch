@@ -1,4 +1,10 @@
 const { hashPassword } = require("./hashPassword");
+const {
+	validateName,
+	validateEmail,
+	validatePassword,
+	validateActive,
+} = require("./validations");
 
 const updateUser = async (user, fields) => {
 	if (
@@ -9,6 +15,15 @@ const updateUser = async (user, fields) => {
 			fields.active === undefined)
 	) {
 		return { error: true, message: "Missing required fields" };
+	}
+
+	try {
+		validateName(fields.name);
+		validateEmail(fields.email);
+		validatePassword(fields.password);
+		validateActive(fields.active);
+	} catch (error) {
+		return { error: true, message: error.message };
 	}
 
 	const updateFields = {};
@@ -28,10 +43,8 @@ const updateUser = async (user, fields) => {
 	if (fields.active !== undefined) {
 		updateFields.active = fields.active;
 	}
-	console.log(user, updateFields);
 
 	return user.update(updateFields).catch((err) => {
-		console.log("err", err);
 		return {
 			error: true,
 			message: "Update user error: " + err.message,

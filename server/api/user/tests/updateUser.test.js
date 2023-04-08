@@ -1,97 +1,113 @@
 const { updateUser } = require("../updateUser");
-describe("updateUser", () => {
-	const user = {
-		id: 1,
-		name: "John Doe",
-		email: "john.doe@example.com",
-		password: "password",
-		active: true,
-		update: jest.fn().mockImplementation((fields) => {
-			return Promise.resolve({
-				...user,
-				...fields,
-			});
-		}),
-	};
+const { hashPassword } = require("../hashPassword");
+
+jest.mock("../hashPassword", () => ({
+	hashPassword: jest.fn(),
+}));
+
+describe("updateUser function", () => {
+	let user;
+	let fields;
+
+	beforeEach(() => {
+		user = {
+			update: jest.fn(),
+		};
+		fields = {
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "password123",
+			active: true,
+		};
+	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	test("returns error if no user is provided", async () => {
-		const result = await updateUser(null, { name: "New Name" });
+	it("should return an error if user is missing or fields are missing", async () => {
+		const result = await updateUser(null, {});
 		expect(result).toEqual({
 			error: true,
 			message: "Missing required fields",
 		});
 	});
 
-	test("returns error if no update fields are provided", async () => {
+	test("returns an error for missing required fields", async () => {
+
+		// Call updateUser with empty fields
 		const result = await updateUser(user, {});
+
+		// Check that an error is returned with the correct message
 		expect(result).toEqual({
 			error: true,
 			message: "Missing required fields",
 		});
+
+		// Check that the update function was not called
+		expect(user.update).not.toHaveBeenCalled();
 	});
 
-	test("updates user name", async () => {
-		const result = await updateUser(user, { name: "New Name" });
-		expect(result).toEqual({
-			id: 1,
-			name: "New Name",
-			email: "john.doe@example.com",
-			password: "password",
-			active: true,
-			update: expect.any(Function),
-		});
-	});
+	test("returns an error for invalid fields", async () => {
 
-	test("updates user email", async () => {
+		// Call updateUser with invalid fields
 		const result = await updateUser(user, {
-			email: "new.email@example.com",
+			name: "J",
+			email: "invalid.email",
+			password: "pass",
+			active: "yes",
 		});
-		expect(result).toEqual({
-			id: 1,
-			name: "John Doe",
-			email: "new.email@example.com",
-			password: "password",
-			active: true,
-			update: expect.any(Function),
-		});
-	});
 
-	test("updates user password", async () => {
-		const result = await updateUser(user, { password: "newpassword" });
-		expect(result).toEqual({
-			id: 1,
-			name: "John Doe",
-			email: "john.doe@example.com",
-			password: expect.any(String),
-			active: true,
-			update: expect.any(Function),
-		});
-	});
-
-	test("updates user active status", async () => {
-		const result = await updateUser(user, { active: false });
-		expect(result).toEqual({
-			id: 1,
-			name: "John Doe",
-			email: "john.doe@example.com",
-			password: "password",
-			active: false,
-			update: expect.any(Function),
-		});
-	});
-
-	test("returns error if update fails", async () => {
-		user.update = jest.fn().mockImplementation(() => {
-			return Promise.reject(new Error("Update error"));
-		});
-		const result = await updateUser(user, { name: "New Name" });
+		// Check that an error is returned with the correct message for each invalid field
 		expect(result).toEqual({
 			error: true,
-			message: "Update user error: Update error",
+			message: "Invalid name",
+		});
+
+		// Check that the update function was not called
+		expect(user.update).not.toHaveBeenCalled();
+	});
+
+	it("should return an error if hashPassword fails", async () => {
+		const error = { error: true, message: "hashPassword error" };
+		hashPassword.mockResolvedValueOnce(error);
+
+		const result = await updateUser(user, fields);
+		expect(result).toEqual(error);
+	});
+
+	it("should update user with new fields and return the updated user", async () => {
+		const updatedUser = {
+			id: 1,
+			name: fields.name,
+			email: fields.email,
+			password: "hashedPassword",
+			active: fields.active,
+		};
+
+		hashPassword.mockResolvedValueOnce("hashedPassword");
+		user.update.mockResolvedValueOnce(updatedUser);
+
+		const result = await updateUser(user, fields);
+		expect(hashPassword).toHaveBeenCalledWith(fields.password);
+		expect(user.update).toHaveBeenCalledWith({
+			name: fields.name,
+			email: fields.email,
+			password: "hashedPassword",
+			active: fields.active,
+		});
+		expect(result).toEqual(updatedUser);
+	});
+
+	it("should return an error if user.update fails", async () => {
+		const error = { error: true, message: "user.update error" };
+		hashPassword.mockResolvedValueOnce("hashedPassword");
+		user.update.mockRejectedValueOnce(error);
+
+		const result = await updateUser(user, fields);
+		expect(result).toEqual({
+			error: true,
+			message: "Update user error: user.update error",
 		});
 	});
 });

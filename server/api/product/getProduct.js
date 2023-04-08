@@ -22,8 +22,8 @@ const getProduct = (idProduct = null) => {
 		});
 };
 
-const getAllProducts = (active = null) => {
-	const where = active !== null ? { active: active } : {};
+const getAllProducts = (active = undefined) => {
+	const where = active !== undefined ? { active: active } : {};
 
 	return Product.findAll({ where: where }).catch((err) => {
 		return {
