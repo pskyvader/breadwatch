@@ -1,10 +1,22 @@
 const { User } = require("../../database");
 const { hashPassword } = require("./hashPassword");
+const {
+	validateName,
+	validateEmail,
+	validatePassword,
+	validateActive,
+} = require("./validations");
 
 const createUser = (fields) => {
-	if (!fields.name || !fields.email || !fields.password || !fields.active) {
-		return { error: true, message: "Missing required fields" };
+	try {
+		validateName(fields.name);
+		validateEmail(fields.email);
+		validatePassword(fields.password);
+		validateActive(fields.active);
+	} catch (error) {
+		return { error: true, message: error.message };
 	}
+
 	return hashPassword(fields.password)
 		.then((hash) => {
 			if (hash.error) {
