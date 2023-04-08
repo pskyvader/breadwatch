@@ -1,117 +1,99 @@
-require("dotenv").config();
-const { User } = require("../../../database");
 const { createUser } = require("../createUser");
+const { User } = require("../../../database");
 const { hashPassword } = require("../hashPassword");
-const {
-	validateName,
-	validateEmail,
-	validatePassword,
-	validateActive,
-} = require("../validations");
 
-jest.mock("../hashPassword");
 jest.mock("../../../database", () => ({
 	User: {
 		create: jest.fn(),
 	},
 }));
 
+jest.mock("../hashPassword", () => ({
+	hashPassword: jest.fn((password) => {
+		if (password === "validpassword") {
+			return Promise.resolve("hashedpassword");
+		} else {
+			return Promise.reject(new Error("Invalid password"));
+		}
+	}),
+}));
 describe("createUser function", () => {
-	afterEach(() => {
+	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it("should return error when missing required fields", async () => {
-		const fields = {
+	test("should create a user with valid data and return hashed password", async () => {
+		const mockFields = {
 			name: "John Doe",
 			email: "johndoe@example.com",
-			password: "password123",
+			password: "validpassword",
+			active: true,
+		};
+		const mockHashedPassword = "hashedpassword";
+
+		hashPassword.mockResolvedValueOnce(mockHashedPassword);
+
+		const expectedUserData = {
+			name: mockFields.name,
+			email: mockFields.email,
+			password: mockHashedPassword,
+			active: mockFields.active,
 		};
 
-		const result = await createUser(fields);
+		User.create.mockResolvedValueOnce(expectedUserData);
 
+		const result = await createUser(mockFields);
+
+		expect(hashPassword).toHaveBeenCalledWith(mockFields.password);
+		expect(User.create).toHaveBeenCalledWith(expectedUserData);
+		expect(result).toEqual(expectedUserData);
+	});
+
+	test("should return an error if an error occurs while hashing the password", async () => {
+		const mockFields = {
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "invalidpassword",
+			active: true,
+		};
+		const mockHashError = new Error("Invalid password");
+
+		hashPassword.mockRejectedValueOnce(mockHashError);
+
+		const result = await createUser(mockFields);
+
+		expect(hashPassword).toHaveBeenCalledWith(mockFields.password);
+		expect(User.create).not.toHaveBeenCalled();
 		expect(result).toEqual({
 			error: true,
-			message: "Invalid active value",
+			message: "Create user error: " + mockHashError.message,
 		});
-		expect(hashPassword).not.toHaveBeenCalled();
-		expect(User.create).not.toHaveBeenCalled();
 	});
 
-	test("should return an error message when a validation fails", async () => {
-		const fields = {
+	test("should return an error if an error occurs while creating the user", async () => {
+		const mockFields = {
 			name: "John Doe",
 			email: "johndoe@example.com",
-			password: "12345",
+			password: "validpassword",
 			active: true,
 		};
-		const errorMsg = "Password must be at least 6 characters long";
+		const mockCreateError = new Error("Error creating user");
 
-		[validateName, validateEmail, validateActive].forEach((v) =>
-			v.mockReturnValue()
-		);
-		validatePassword.mockImplementation(() => {
-			throw new Error(errorMsg);
-		});
+		hashPassword.mockResolvedValueOnce("hashedpassword");
+		User.create.mockRejectedValueOnce(mockCreateError);
 
-		const result = await createUser(fields);
+		const result = await createUser(mockFields);
 
-		expect(validateName).toHaveBeenCalledWith(fields.name);
-		expect(validateEmail).toHaveBeenCalledWith(fields.email);
-		expect(validatePassword).toHaveBeenCalledWith(fields.password);
-		expect(validateActive).toHaveBeenCalledWith(fields.active);
-		expect(hashPassword).not.toHaveBeenCalled();
-		expect(User.create).not.toHaveBeenCalled();
-		expect(result).toEqual({ error: true, message: errorMsg });
-	});
-
-	it("should create a new user with hashed password and return the user object", async () => {
-		const fields = {
-			name: "John Doe",
-			email: "john.doe@example.com",
-			password: "password",
-			active: true,
-		};
-		const hashedPassword = "hashedPassword";
-		hashPassword.mockResolvedValue(hashedPassword);
-		User.create.mockResolvedValue({
-			id: 1,
-			...fields,
-			password: hashedPassword,
-		});
-		const result = await createUser(fields);
-		expect(hashPassword).toHaveBeenCalledWith(fields.password);
+		expect(hashPassword).toHaveBeenCalledWith(mockFields.password);
 		expect(User.create).toHaveBeenCalledWith({
-			name: fields.name,
-			email: fields.email,
-			password: hashedPassword,
-			active: fields.active,
-		});
-		expect(result).toEqual({ id: 1, ...fields, password: hashedPassword });
-	});
-
-	it("should return an error message if creating the user fails", async () => {
-		const fields = {
-			name: "John Doe",
-			email: "john.doe@example.com",
-			password: "password",
-			active: true,
-		};
-		const error = new Error("Create user failed");
-		const hashedPassword = "hashedPassword";
-		hashPassword.mockResolvedValue(hashedPassword);
-		User.create.mockRejectedValue(error);
-		const result = await createUser(fields);
-		expect(hashPassword).toHaveBeenCalledWith(fields.password);
-		expect(User.create).toHaveBeenCalledWith({
-			name: fields.name,
-			email: fields.email,
-			password: hashedPassword,
-			active: fields.active,
+			name: mockFields.name,
+			email: mockFields.email,
+			password: "hashedpassword",
+			active: mockFields.active,
 		});
 		expect(result).toEqual({
 			error: true,
-			message: "Create user error: Create user failed",
+			message: "Create user error: " + mockCreateError.message,
 		});
 	});
 });

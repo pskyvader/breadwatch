@@ -31,10 +31,23 @@ const validateActive = (value) => {
 	}
 };
 
+const validateHashedPassword = (password, hash) => {
+	return bcrypt.compare(password, hash).then((res) => {
+		if (res === true) {
+			return true;
+		}
+		return {
+			error: true,
+			message: "password does not match",
+		};
+	});
+};
+
 module.exports = {
 	validateId,
 	validateName,
 	validateEmail,
 	validatePassword,
 	validateActive,
+	validateHashedPassword,
 };
