@@ -1,5 +1,4 @@
 const { User } = require("../../database");
-const bcrypt = require("bcrypt");
 const {
 	validateId,
 	validateEmail,
@@ -23,17 +22,15 @@ const getUser = (idUser = null, email = null) => {
 		return { error: true, message: error.message };
 	}
 
-	const where = email !== null ? { email: email } : { id: idUser };
+	const where = email ? { email: email } : { id: idUser };
 
 	return User.findOne({
 		where: where,
 	})
 		.then((user) => {
+			console.log(user);
 			if (user === null) {
-				return {
-					error: true,
-					message: "User not found",
-				};
+				return { error: true, message: "User not found" };
 			}
 			return user;
 		})

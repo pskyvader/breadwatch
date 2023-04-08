@@ -1,6 +1,6 @@
 const validateId = (value) => {
 	if (!Number.isInteger(value) || value <= 0) {
-		throw new Error("Invalid id");
+		throw new Error("Invalid user ID");
 	}
 };
 
