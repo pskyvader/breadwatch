@@ -19,7 +19,6 @@ const createUser = (fields) => {
 
 	return hashPassword(fields.password)
 		.then((hash) => {
-			console.log(fields.password, hash);
 			if (hash.error) {
 				return hash;
 			}

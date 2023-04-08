@@ -1,6 +1,5 @@
 const { getUser } = require("../getUser");
 const { User } = require("../../../database");
-const { hashPassword } = require("../hashPassword");
 
 jest.mock("../../../database", () => {
 	return {
@@ -11,15 +10,6 @@ jest.mock("../../../database", () => {
 	};
 });
 
-jest.mock("../hashPassword", () => ({
-	hashPassword: jest.fn((password) => {
-		if (password === "validpassword") {
-			return Promise.resolve("hashedpassword");
-		} else {
-			return Promise.reject(new Error("Invalid password"));
-		}
-	}),
-}));
 describe("getUser", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();

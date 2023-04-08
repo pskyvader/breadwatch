@@ -28,7 +28,6 @@ const getUser = (idUser = null, email = null) => {
 		where: where,
 	})
 		.then((user) => {
-			console.log(user);
 			if (user === null) {
 				return { error: true, message: "User not found" };
 			}

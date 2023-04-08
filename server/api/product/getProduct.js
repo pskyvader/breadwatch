@@ -1,28 +1,40 @@
 const { Product } = require("../../database");
+const { validateId, validateActive } = require("./validations");
 
-const getProduct = (idProduct = null) => {
-	if (idProduct === null) {
-		return { error: true, message: "Missing required fields" };
+const getProduct = (idProduct) => {
+	try {
+		validateId(idProduct);
+	} catch (error) {
+		return { error: true, message: error.message };
 	}
 	return Product.findByPk(idProduct)
-		.then((Product) => {
-			if (Product === null) {
+		.then((product) => {
+			if (product === null) {
 				return {
 					error: true,
 					message: "Product not found",
 				};
 			}
-			return Product;
+			return product;
 		})
 		.catch((err) => {
 			return {
 				error: true,
-				message: "Get Product error: " + err.message,
+				message: "Get product error: " + err.message,
 			};
 		});
 };
 
 const getAllProducts = (active = undefined) => {
+	if (active !== undefined) {
+		try {
+			if (active) {
+				validateActive(active);
+			}
+		} catch (error) {
+			return { error: true, message: error.message };
+		}
+	}
 	const where = active !== undefined ? { active: active } : {};
 
 	return Product.findAll({ where: where }).catch((err) => {
