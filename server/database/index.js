@@ -21,30 +21,22 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 class Logs extends Model {}
 Logs.init(LogsConfiguration, {
-	// Other model options go here
-	sequelize, // We need to pass the connection instance
-	// modelName: "Logs", // We need to choose the model name
+	sequelize,
 });
 
 class User extends Model {}
 User.init(UserConfiguration, {
-	// Other model options go here
-	sequelize, // We need to pass the connection instance
-	// modelName: "Logs", // We need to choose the model name
+	sequelize,
 });
 
 class Product extends Model {}
 Product.init(ProductConfiguration, {
-	// Other model options go here
-	sequelize, // We need to pass the connection instance
-	// modelName: "Logs", // We need to choose the model name
+	sequelize,
 });
 
 class History extends Model {}
 History.init(HistoryConfiguration, {
-	// Other model options go here
-	sequelize, // We need to pass the connection instance
-	// modelName: "Logs", // We need to choose the model name
+	sequelize,
 });
 
 User.belongsToMany(Product, {
