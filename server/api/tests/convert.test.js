@@ -41,31 +41,31 @@ const products = [
 
 const user = { id: 1 };
 const history = [
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 2 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 2 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 2 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 4 },
-	{ date: new Date("2022-01-01T00:00:00.000Z"), UserId: 1, ProductId: 6 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 2 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 2 },
-	{ date: new Date("2022-01-02T00:00:00.000Z"), UserId: 1, ProductId: 3 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 1 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 3 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 4 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 4 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 4 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 4 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 5 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 5 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 5 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 5 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 5 },
-	{ date: new Date("2022-01-03T00:00:00.000Z"), UserId: 1, ProductId: 6 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 2 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 2 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 2 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 4 },
+	{ date: new Date("2022-01-01"), UserId: 1, ProductId: 6 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 2 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 2 },
+	{ date: new Date("2022-01-02"), UserId: 1, ProductId: 3 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 1 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 3 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 4 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 4 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 4 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 4 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 5 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 5 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 5 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 5 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 5 },
+	{ date: new Date("2022-01-03"), UserId: 1, ProductId: 6 },
 ];
 
 jest.mock("../../database", () => {
@@ -150,15 +150,38 @@ describe("transferLogsToHistory", () => {
 	});
 	it("should throw an error for invalid product names", async () => {
 		jest.clearAllMocks();
-        const products = [
-            { id: 1, name: "bread", calories: 200, healthy: false, active: true },
-            { id: 2, name: "cookie", calories: 100, healthy: false, active: true },
-            { id: 3, name: "cake", calories: 300, healthy: false, active: true },
-            { id: 4, name: "fruit", calories: 50, healthy: true, active: true },
-            { id: 5, name: "vegetable", calories: 50, healthy: true, active: true },
-        ];//removed product "walk"
-        Product.findAll.mockResolvedValue(products);
-
+		const products = [
+			{
+				id: 1,
+				name: "bread",
+				calories: 200,
+				healthy: false,
+				active: true,
+			},
+			{
+				id: 2,
+				name: "cookie",
+				calories: 100,
+				healthy: false,
+				active: true,
+			},
+			{
+				id: 3,
+				name: "cake",
+				calories: 300,
+				healthy: false,
+				active: true,
+			},
+			{ id: 4, name: "fruit", calories: 50, healthy: true, active: true },
+			{
+				id: 5,
+				name: "vegetable",
+				calories: 50,
+				healthy: true,
+				active: true,
+			},
+		]; //removed product "walk"
+		Product.findAll.mockResolvedValue(products);
 
 		await expect(transferLogsToHistory(1, logs)).rejects.toThrow(
 			"Invalid product name: walk"

@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Logs, User, History, Product } = require("../database");
+const { User, History, Product } = require("../database");
 
 const transferLogsToHistory = async (userId, logs) => {
 	if (!logs || logs.length === 0) return;
@@ -16,17 +16,16 @@ const transferLogsToHistory = async (userId, logs) => {
 				continue;
 			}
 			const product = products.find((p) => p.name === productName);
-			const currentDate = new Date(log.date);
-			if (product) {
-				for (let i = 0; i < quantity; i++) {
-					historyData.push({
-						date: currentDate,
-						UserId: user.id,
-						ProductId: product.id,
-					});
-				}
-			} else {
+			if (!product) {
 				throw new Error(`Invalid product name: ${productName}`);
+			}
+			const currentDate = new Date(log.date);
+			for (let i = 0; i < quantity; i++) {
+				historyData.push({
+					date: currentDate,
+					UserId: user.id,
+					ProductId: product.id,
+				});
 			}
 		}
 	}
