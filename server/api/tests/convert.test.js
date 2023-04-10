@@ -2,23 +2,41 @@ const { transferLogsToHistory } = require("../convert");
 const { Logs, User, History, Product } = require("../../database");
 
 const logs = [
-	{ id: 1, userId: 1, product: "bread", quantity: 2, date: "2022-01-01" },
 	{
-		id: 2,
-		userId: 1,
-		product: "cookies",
-		quantity: 3,
 		date: "2022-01-01",
+		bread: 2,
+		cookie: 3,
+		cake: 0,
+		fruit: 1,
+		vegetable: 0,
+		walk: true,
 	},
-	{ id: 3, userId: 1, product: "cake", quantity: 1, date: "2022-01-01" },
-	{ id: 4, userId: 1, product: "fruit", quantity: 2, date: "2022-01-01" },
+	{
+		date: "2022-01-02",
+		bread: 3,
+		cookie: 2,
+		cake: 1,
+		fruit: 0,
+		vegetable: 0,
+		walk: false,
+	},
+	{
+		date: "2022-01-03",
+		bread: 1,
+		cookie: 0,
+		cake: 1,
+		fruit: 4,
+		vegetable: 5,
+		walk: true,
+	},
 ];
-
 const products = [
 	{ id: 1, name: "bread", calories: 200, healthy: false, active: true },
-	{ id: 2, name: "cookies", calories: 100, healthy: false, active: true },
+	{ id: 2, name: "cookie", calories: 100, healthy: false, active: true },
 	{ id: 3, name: "cake", calories: 300, healthy: false, active: true },
 	{ id: 4, name: "fruit", calories: 50, healthy: true, active: true },
+	{ id: 5, name: "vegetable", calories: 50, healthy: true, active: true },
+	{ id: 6, name: "walk", calories: 0, healthy: true, active: true },
 ];
 
 const user = { id: 1 };
@@ -31,37 +49,82 @@ const history = [
 	{
 		date: new Date("2022-01-01"),
 		UserId: 1,
+		ProductId: 2,
+	},
+	{
+		date: new Date("2022-01-01"),
+		UserId: 1,
+		ProductId: 4,
+	},
+	{
+		date: new Date("2022-01-02"),
+		UserId: 1,
 		ProductId: 1,
 	},
 	{
-		date: new Date("2022-01-01"),
+		date: new Date("2022-01-02"),
+		UserId: 1,
+		ProductId: 1,
+	},
+	{
+		date: new Date("2022-01-02"),
+		UserId: 1,
+		ProductId: 1,
+	},
+	{
+		date: new Date("2022-01-02"),
 		UserId: 1,
 		ProductId: 2,
 	},
 	{
-		date: new Date("2022-01-01"),
+		date: new Date("2022-01-02"),
 		UserId: 1,
 		ProductId: 2,
 	},
 	{
-		date: new Date("2022-01-01"),
-		UserId: 1,
-		ProductId: 2,
-	},
-	{
-		date: new Date("2022-01-01"),
+		date: new Date("2022-01-02"),
 		UserId: 1,
 		ProductId: 3,
 	},
 	{
-		date: new Date("2022-01-01"),
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 1,
+	},
+	{
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 3,
+	},
+	{
+		date: new Date("2022-01-03"),
 		UserId: 1,
 		ProductId: 4,
 	},
 	{
-		date: new Date("2022-01-01"),
+		date: new Date("2022-01-03"),
 		UserId: 1,
-		ProductId: 4,
+		ProductId: 5,
+	},
+	{
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 5,
+	},
+	{
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 5,
+	},
+	{
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 5,
+	},
+	{
+		date: new Date("2022-01-03"),
+		UserId: 1,
+		ProductId: 5,
 	},
 ];
 
@@ -81,7 +144,13 @@ jest.mock("../../database", () => {
 			findAll: jest.fn().mockResolvedValue(products),
 		},
 		User: {
-			findByPk: jest.fn().mockResolvedValue(user),
+			findByPk: jest.fn().mockImplementation((id) => {
+				if (id && typeof id === "number" && id > 0) {
+					return Promise.resolve(user);
+				} else {
+					return Promise.reject(new Error("Invalid user ID"));
+				}
+			}),
 		},
 		History: {
 			bulkCreate: jest.fn(),
@@ -95,6 +164,7 @@ describe("transferLogsToHistory", () => {
 	});
 
 	it("should transfer logs to history for a user with logs", async () => {
+		jest.clearAllMocks();
 		await transferLogsToHistory(1, logs);
 
 		expect(User.findByPk).toHaveBeenCalledTimes(1);
@@ -114,6 +184,7 @@ describe("transferLogsToHistory", () => {
 	});
 
 	it("should return undefined if logs array is empty", async () => {
+		jest.clearAllMocks();
 		const result = await transferLogsToHistory(1, []);
 		expect(User.findByPk).not.toHaveBeenCalled();
 		expect(Product.findAll).not.toHaveBeenCalled();
@@ -122,6 +193,7 @@ describe("transferLogsToHistory", () => {
 	});
 
 	it("should throw an error if the bulkCreate database call fails", async () => {
+		jest.clearAllMocks();
 		const errorMessage = "Database error";
 		History.bulkCreate.mockRejectedValue(new Error(errorMessage));
 		await expect(transferLogsToHistory(1, logs)).rejects.toThrow(
@@ -135,5 +207,48 @@ describe("transferLogsToHistory", () => {
 
 		expect(History.bulkCreate).toHaveBeenCalledTimes(1);
 		expect(History.bulkCreate).toHaveBeenCalledWith(history);
+	});
+	it("should throw an error for invalid product names", async () => {
+		const invalidLogs = [
+			{
+				id: 1,
+				userId: 1,
+				product: "bread",
+				quantity: 2,
+				date: "2022-01-01",
+			},
+			{
+				id: 2,
+				userId: 1,
+				product: "cookies",
+				quantity: 3,
+				date: "2022-01-01",
+			},
+			{
+				id: 3,
+				userId: 1,
+				product: "cake",
+				quantity: 1,
+				date: "2022-01-01",
+			},
+			{
+				id: 4,
+				userId: 1,
+				product: "nonexistent-product",
+				quantity: 2,
+				date: "2022-01-01",
+			},
+		];
+
+		await expect(transferLogsToHistory(1, invalidLogs)).rejects.toThrow(
+			"Invalid product name: nonexistent-product"
+		);
+
+		expect(User.findByPk).toHaveBeenCalledTimes(1);
+		expect(User.findByPk).toHaveBeenCalledWith(1);
+
+		expect(Product.findAll).toHaveBeenCalledTimes(1);
+
+		expect(History.bulkCreate).not.toHaveBeenCalled();
 	});
 });
