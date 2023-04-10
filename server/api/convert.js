@@ -30,9 +30,6 @@ const transferLogsToHistory = async (userId, logs) => {
 			}
 		}
 	}
-
-	console.log(`${historyData}`);
-
 	await History.bulkCreate(historyData);
 };
 module.exports = { transferLogsToHistory };
