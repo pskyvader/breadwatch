@@ -5,6 +5,7 @@ const {
 	validatePassword,
 	validateActive,
 	validateHashedPassword,
+	validateToken,
 } = require("./validations");
 
 const getUser = (idUser = null, email = null) => {
@@ -67,9 +68,40 @@ const getUserByPassword = (email = null, password = null) => {
 					}
 
 					delete user.password;
+					delete user.token;
 					return user;
 				}
 			);
+		})
+		.catch((err) => {
+			return { error: true, message: "Get user error: " + err.message };
+		});
+};
+
+const getUserByToken = (token) => {
+	if (!token) {
+		return { error: true, message: "Missing required fields" };
+	}
+
+	try {
+		validateToken(token);
+	} catch (error) {
+		return { error: true, message: error.message };
+	}
+
+	return User.findOne({
+		where: { token: token },
+	})
+		.then((user) => {
+			if (user === null) {
+				return {
+					error: true,
+					message: "User not found",
+				};
+			}
+			delete user.password;
+			delete user.token;
+			return user;
 		})
 		.catch((err) => {
 			return { error: true, message: "Get user error: " + err.message };
@@ -94,5 +126,6 @@ const getAllUsers = (active = null) => {
 module.exports = {
 	getUser,
 	getUserByPassword,
+	getUserByToken,
 	getAllUsers,
 };

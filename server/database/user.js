@@ -20,6 +20,11 @@ const UserConfiguration = {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
+	token: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		unique: true,
+	},
 	active: {
 		type: DataTypes.BOOLEAN,
 		allowNull: false,

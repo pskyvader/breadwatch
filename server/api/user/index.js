@@ -1,5 +1,10 @@
 const { createUser } = require("./createUser");
-const { getUser, getUserByPassword, getAllUsers } = require("./getUser");
+const {
+	getUser,
+	getUserByPassword,
+	getAllUsers,
+	getUserByToken,
+} = require("./getUser");
 const { hashPassword } = require("./hashPassword");
 const { updateUser } = require("./updateUser");
 
@@ -10,4 +15,5 @@ module.exports = {
 	getAllUsers,
 	hashPassword,
 	updateUser,
+	getUserByToken,
 };

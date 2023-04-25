@@ -9,6 +9,11 @@ const validateName = (value) => {
 		throw new Error("Invalid name");
 	}
 };
+const validateToken = (value) => {
+	if (typeof value !== "string" || value.length < 2) {
+		throw new Error("Invalid token");
+	}
+};
 
 const validateEmail = (value) => {
 	if (
@@ -21,7 +26,13 @@ const validateEmail = (value) => {
 
 const validatePassword = (value) => {
 	if (typeof value !== "string" || value.length < 6) {
-		throw new Error("Invalid password");
+		throw new Error("Invalid password, must have at least 6 characters");
+	}
+};
+
+const validatePasswordMatch = (value, value2) => {
+	if (value !== value2) {
+		throw new Error("Passwords don't match");
 	}
 };
 
@@ -45,9 +56,11 @@ const validateHashedPassword = (password, hash) => {
 
 module.exports = {
 	validateId,
+	validateToken,
 	validateName,
 	validateEmail,
 	validatePassword,
+	validatePasswordMatch,
 	validateActive,
 	validateHashedPassword,
 };

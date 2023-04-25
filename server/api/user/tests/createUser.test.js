@@ -27,6 +27,7 @@ describe("createUser function", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "validpassword",
+			confirm_password: "validpassword",
 			active: true,
 		};
 		const mockHashedPassword = "hashedpassword";
@@ -54,6 +55,7 @@ describe("createUser function", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "invalidpassword",
+			confirm_password: "invalidpassword",
 			active: true,
 		};
 		const mockHashError = new Error("Invalid password");
@@ -75,6 +77,7 @@ describe("createUser function", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "validpassword",
+			confirm_password: "validpassword",
 			active: true,
 		};
 		const mockCreateError = new Error("Error creating user");

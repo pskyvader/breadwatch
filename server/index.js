@@ -2,8 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const pgSession = require("connect-pg-simple")(session);
-const { connection } = require("./database");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+
+const { sequelize, connection } = require("./database");
+const apiRoute = require("./routes/api");
+const { login } = require("./pages/login");
+const { loginCookie } = require("./pages/loginCookie");
+const { logout } = require("./pages/logout");
 
 const {
 	getAllLogs,
@@ -17,27 +22,23 @@ const {
 	WALK,
 } = require("./api");
 
+const { getUserByToken } = require("./api/user");
+
 connection();
+const sessionStore = new SequelizeStore({
+	db: sequelize,
+});
 
 const app = express();
 app.use(
 	session({
-		store: new pgSession({
-			createTableIfMissing: true,
-			conObject: {
-				connectionString: process.env.DATABASE_URL,
-				// ssl: {
-				// 	// require: true,
-				// 	sslmode: "require",
-				// 	rejectUnauthorized: false,
-				// },
-			},
-		}),
+		store: sessionStore,
 		secret: process.env.SESSION_SECRET,
 		saveUninitialized: false,
 		resave: false,
 	})
 );
+sessionStore.sync();
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.disable("x-powered-by");
 
@@ -47,6 +48,54 @@ app.use(express.static("client/build")); //Serves resources from public folder
 // let the react app to handle any unknown routes
 // serve up the index.html if express does'nt recognize the route
 const path = require("path");
+
+const tenMinutes = 600000;
+const userCache = {};
+
+app.post("/api/login", async (req, res) => {
+	res.json(login(req, res));
+});
+app.get("/api/logincookie", async (req, res) => {
+	res.json(loginCookie(req));
+});
+app.get("/api/logout", async (req, res) => {
+	res.json(logout(req, res));
+});
+
+app.use("/api/*", async (req, res, next) => {
+	const session = { ...req.session };
+	if (!session.token) {
+		return res.json({
+			error: true,
+			message: "No valid user data found",
+		});
+	}
+
+	const user = userCache[session.token];
+	if (user) {
+		req.user = user;
+		return next();
+	}
+	const validUser = await getUserByToken(session.token);
+	if (validUser.error) {
+		return res.json(validUser);
+	}
+	userCache[session.token] = validUser;
+	req.user = validUser;
+	next();
+});
+
+app.use("/api", apiRoute);
+
+app.get("*.*", (req, res) => {
+	res.sendStatus(404);
+});
+
+app.get("*", (req, res) => {
+	res.sendFile(
+		path.resolve(__dirname, "..", "client", "build", "index.html")
+	);
+});
 
 app.get("/log/get/all", async (req, res) => {
 	const result = await getAllLogs();
