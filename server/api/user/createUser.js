@@ -13,7 +13,7 @@ const createUser = (fields) => {
 		validateName(fields.name);
 		validateEmail(fields.email);
 		validatePassword(fields.password);
-		validatePasswordMatch(fields.confirm_password);
+		validatePasswordMatch(fields.password, fields.confirm_password);
 		validateActive(fields.active);
 	} catch (error) {
 		return { error: true, message: error.message };

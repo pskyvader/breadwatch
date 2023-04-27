@@ -50,6 +50,25 @@ describe("createUser function", () => {
 		expect(result).toEqual(expectedUserData);
 	});
 
+	test("should return an error if passwords don't match", async () => {
+		const mockFields = {
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "validpassword",
+			confirm_password: "notmatchingpassword",
+			active: true,
+		};
+		const result = await createUser(mockFields);
+
+		expect(User.create).not.toHaveBeenCalled();
+		const expectedUserData = {
+			error: true,
+			message: "Passwords don't match",
+		};
+
+		expect(result).toEqual(expectedUserData);
+	});
+
 	test("should return an error if an error occurs while hashing the password", async () => {
 		const mockFields = {
 			name: "John Doe",

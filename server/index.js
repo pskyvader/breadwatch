@@ -6,9 +6,7 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const { sequelize, connection } = require("./database");
 const apiRoute = require("./routes/api");
-const { login } = require("./pages/login");
-const { loginCookie } = require("./pages/loginCookie");
-const { logout } = require("./pages/logout");
+const { login, loginCookie, logout, register } = require("./pages/user");
 
 const {
 	getAllLogs,
@@ -60,6 +58,9 @@ app.get("/api/logincookie", async (req, res) => {
 });
 app.get("/api/logout", async (req, res) => {
 	res.json(logout(req, res));
+});
+app.get("/api/register", async (req, res) => {
+	res.json(register(req, res));
 });
 
 app.use("/api/*", async (req, res, next) => {
