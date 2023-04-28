@@ -1,14 +1,14 @@
 const { register } = require("../register");
-const { getUser, createUser } = require("../../../api/user");
+const { createUser } = require("../../../api/user");
 
 // Mock the createUser function globally
+
 jest.mock("../../../api/user", () => ({
-	getUser: jest.fn(),
 	createUser: jest.fn(() =>
 		Promise.resolve({
 			name: "John Doe",
 			email: "johndoe@example.com",
-			token: "token",
+			token: "generated_token",
 			active: true,
 		})
 	),
@@ -18,10 +18,13 @@ describe("register function", () => {
 	beforeEach(() => {
 		// Reset the createUser mock before each test
 		createUser.mockReset();
-		getUser.mockReset();
 	});
 
 	it("should return an error if the email is invalid", async () => {
+		createUser.mockResolvedValueOnce({
+			error: true,
+			message: "Invalid email",
+		});
 		const req = {
 			body: {
 				name: "John Doe",
@@ -38,11 +41,9 @@ describe("register function", () => {
 	});
 
 	it("should return an error if the email already exists", async () => {
-		getUser.mockResolvedValueOnce({
-			name: "Jane Doe",
-			email: "johndoe@example.com",
-			token: "token",
-			active: true,
+		createUser.mockResolvedValueOnce({
+			error: true,
+			message: "User Already exists",
 		});
 		const req = {
 			body: {
@@ -51,16 +52,29 @@ describe("register function", () => {
 				password: "password",
 				confirm_password: "password",
 			},
+			session: {},
 		};
 
 		const result = await register(req);
-		expect(getUser).toHaveBeenCalledWith(null, "johndoe@example.com");
+		expect(createUser).toHaveBeenCalledWith({
+			active: true,
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "password",
+			confirm_password: "password",
+		});
 		expect(result).toEqual({ error: true, message: "User Already exists" });
 	});
 
 	it("should register a new user with a generated token", async () => {
 		// Mock the createUser function to return a user object with a generated token
-		// getUser.mockResolvedValueOnce(null);
+		// createUser.mockResolvedValueOnce({
+		// 	name: "John Doe",
+		// 	email: "johndoe@example.com",
+		// 	token: "generated_token",
+		// 	active: true,
+		// });
+
 		const req = {
 			body: {
 				name: "John Doe",
@@ -72,7 +86,6 @@ describe("register function", () => {
 		};
 
 		const user = await register(req);
-		console.log(user);
 
 		// Check that the returned user object has the correct properties
 		expect(user.name).toEqual("John Doe");
