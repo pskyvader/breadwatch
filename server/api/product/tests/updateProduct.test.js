@@ -3,8 +3,14 @@ const { Product } = require("../../../database");
 
 jest.mock("../../../database", () => ({
 	Product: {
-		create: jest.fn(),
-		update: jest.fn(),
+		create: jest.fn().mockResolvedValue({
+			id: 1,
+			name: "Existing Product",
+			calories: 100,
+			healthy: true,
+			active: true,
+			update: jest.fn().mockResolvedValue([1]),
+		}),
 	},
 }));
 
@@ -14,43 +20,19 @@ describe("updateProduct", () => {
 	});
 
 	test("should update product with valid fields", async () => {
-		const mockProduct = await Product.create({
-			id: 1,
-			name: "Existing Product",
-			calories: 100,
-			healthy: true,
-			active: true,
-		});
-
-		mockProduct.update = jest.fn().mockResolvedValue();
-		Product.update.mockResolvedValue([1]);
-
-		await updateProduct(mockProduct, {
+		const mockProduct = await Product.create();
+		const mockNewProduct = {
 			name: "New Product Name",
 			calories: 200,
 			healthy: true,
 			active: false,
-		});
-
-		expect(Product.update).toHaveBeenCalledWith(
-			{
-				name: "New Product Name",
-				calories: 200,
-				healthy: true,
-				active: false,
-			},
-			{ where: { id: 1 } }
-		);
+		};
+		await updateProduct(mockProduct, mockNewProduct);
+		expect(mockProduct.update).toHaveBeenCalledWith(mockNewProduct);
 	});
 
 	test("should return error for missing required fields", async () => {
-		const mockProduct = await Product.create({
-			id: 1,
-			name: "Existing Product",
-			calories: 100,
-			healthy: true,
-			active: true,
-		});
+		const mockProduct = await Product.create();
 
 		const result = await updateProduct(mockProduct, {});
 
@@ -58,17 +40,11 @@ describe("updateProduct", () => {
 			error: true,
 			message: "Missing required fields",
 		});
-		expect(Product.update).not.toHaveBeenCalled();
+		expect(mockProduct.update).not.toHaveBeenCalled();
 	});
 
 	test("should return error for invalid field values", async () => {
-		const mockProduct = await Product.create({
-			id: 1,
-			name: "Existing Product",
-			calories: 100,
-			healthy: true,
-			active: true,
-		});
+		const mockProduct = await Product.create();
 
 		const result = await updateProduct(mockProduct, {
 			name: 123,
@@ -81,6 +57,6 @@ describe("updateProduct", () => {
 			error: true,
 			message: expect.stringContaining("Invalid"),
 		});
-		expect(Product.update).not.toHaveBeenCalled();
+		expect(mockProduct.update).not.toHaveBeenCalled();
 	});
 });
