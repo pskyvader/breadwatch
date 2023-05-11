@@ -4,14 +4,7 @@ const { createUser } = require("../../../api/user");
 // Mock the createUser function globally
 
 jest.mock("../../../api/user", () => ({
-	createUser: jest.fn(() =>
-		Promise.resolve({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			token: "generated_token",
-			active: true,
-		})
-	),
+	createUser: jest.fn(),
 }));
 
 describe("register function", () => {
@@ -68,12 +61,12 @@ describe("register function", () => {
 
 	it("should register a new user with a generated token", async () => {
 		// Mock the createUser function to return a user object with a generated token
-		// createUser.mockResolvedValueOnce({
-		// 	name: "John Doe",
-		// 	email: "johndoe@example.com",
-		// 	token: "generated_token",
-		// 	active: true,
-		// });
+		createUser.mockResolvedValueOnce({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			token: "generated_token",
+			active: true,
+		});
 
 		const req = {
 			body: {
