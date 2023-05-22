@@ -38,17 +38,16 @@ const validateFields = (fields) => {
 };
 
 const updateProduct = async (product, fields) => {
-	if (!product || Object.keys(fields).length === 0) {
-		return { error: true, message: "Missing required fields" };
-	}
-
 	try {
 		const updateFields = validateFields(fields);
+		if (!product || Object.keys(updateFields).length === 0) {
+			return { error: true, message: "Missing required fields" };
+		}
 
 		return product.update(updateFields).catch((err) => {
 			return {
 				error: true,
-				message: "Create Product error: " + err.message,
+				message: "Update Product error: " + err.message,
 			};
 		});
 	} catch (error) {

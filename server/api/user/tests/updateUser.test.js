@@ -17,6 +17,7 @@ describe("updateUser function", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "password123",
+			confirm_password: "password123",
 			active: true,
 		};
 	});
@@ -34,7 +35,6 @@ describe("updateUser function", () => {
 	});
 
 	test("returns an error for missing required fields", async () => {
-
 		// Call updateUser with empty fields
 		const result = await updateUser(user, {});
 
@@ -49,7 +49,6 @@ describe("updateUser function", () => {
 	});
 
 	test("returns an error for invalid fields", async () => {
-
 		// Call updateUser with invalid fields
 		const result = await updateUser(user, {
 			name: "J",

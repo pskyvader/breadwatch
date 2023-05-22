@@ -25,13 +25,8 @@ const validateFields = (fields) => {
 };
 
 const createProduct = (fields) => {
-	if (Object.keys(fields).length !== 4) {
-		return { error: true, message: "Missing required fields" };
-	}
-
 	try {
 		const validatedFields = validateFields(fields);
-
 		return Product.create(validatedFields).catch((err) => {
 			return {
 				error: true,
