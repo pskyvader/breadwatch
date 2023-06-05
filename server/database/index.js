@@ -3,6 +3,8 @@ const { LogsConfiguration } = require("./logs");
 const { UserConfiguration } = require("./user");
 const { ProductConfiguration } = require("./product");
 const { HistoryConfiguration } = require("./history");
+const { ActivityConfiguration } = require("./activity");
+const { ActivityHistoryConfiguration } = require("./activityHistory");
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	// dialect: 'postgres',
@@ -51,11 +53,33 @@ History.belongsTo(User);
 Product.hasMany(History);
 History.belongsTo(Product);
 
+class Activity extends Model {}
+Activity.init(ActivityConfiguration, {
+	sequelize,
+});
+
+class ActivityHistory extends Model {}
+ActivityHistory.init(ActivityHistoryConfiguration, {
+	sequelize,
+});
+
+User.belongsToMany(Activity, {
+	through: { model: ActivityHistory, unique: false },
+});
+Activity.belongsToMany(User, {
+	through: { model: ActivityHistory, unique: false },
+});
+
+User.hasMany(ActivityHistory);
+ActivityHistory.belongsTo(User);
+Activity.hasMany(ActivityHistory);
+ActivityHistory.belongsTo(Activity);
+
 const connection = async () => {
 	try {
 		await sequelize.authenticate();
 		console.log("Connection has been established successfully.");
-		await sequelize.sync({ force: false, alter: false });
+		await sequelize.sync({ force: false, alter: true });
 		console.log("Sync successful.");
 	} catch (error) {
 		console.error("Unable to connect to the database:", error.message);
