@@ -87,7 +87,7 @@ app.use("/api/*", async (req, res, next) => {
 });
 
 app.use("/api", apiRoute);
-
+/*
 app.get("*.*", (req, res) => {
 	res.sendStatus(404);
 });
@@ -97,6 +97,7 @@ app.get("*", (req, res) => {
 		path.resolve(__dirname, "..", "client", "build", "index.html")
 	);
 });
+*/
 
 app.get("/log/get/all", async (req, res) => {
 	const result = await getAllLogs();
