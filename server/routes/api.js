@@ -4,14 +4,14 @@ const cache = new NodeCache();
 
 const router = express.Router();
 
-const { getUserPlaylists } = require("../api/user");
-const { getRecentlyPlayedSongs } = require("../api/song");
-const apiRoute = require("./api.playlist");
+//const { getUserPlaylists } = require("../api/user");
+//const { getRecentlyPlayedSongs } = require("../api/song");
+//const apiRoute = require("./api.playlist");
 
 // const { cache } = require("../utils");
 const tenMinutes = 600;
 
-const playlistCache = {};
+//const playlistCache = {};
 
 router.get("/loggedin", async function (req, res) {
 	const user = req.user;
@@ -28,6 +28,7 @@ router.get("/me", async (req, res) => {
 	res.json(user);
 });
 
+/*
 router.get("/me/playlist", async (req, res) => {
 	const user = req.user;
 	let response = cache.get(`playlist-user-${user.id}`);
@@ -84,7 +85,7 @@ router.use("/playlist/:playlistId*", async (req, res, next) => {
 });
 
 router.use("/playlist/:playlistId", apiRoute);
-
+*/
 router.get("/*", (req, res) => {
 	res.status(404).json({
 		error: "Unknown module",
