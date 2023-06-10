@@ -22,7 +22,9 @@ const {
 
 const { getUserByToken } = require("./api/user");
 
-connection();
+connection().catch((err) => {
+	console.log("connection error:", err);
+});
 const sessionStore = new SequelizeStore({
 	db: sequelize,
 });

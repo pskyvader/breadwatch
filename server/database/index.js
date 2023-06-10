@@ -87,6 +87,7 @@ const connection = async () => {
 };
 
 module.exports = {
+	sequelize,
 	connection,
 	Logs,
 	User,
