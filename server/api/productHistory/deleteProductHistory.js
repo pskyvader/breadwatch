@@ -1,4 +1,4 @@
-const deleteHistory = (history) => {
+const deleteProductHistory = (history) => {
 	return history.destroy().catch((err) => {
 		return {
 			error: true,
@@ -8,5 +8,5 @@ const deleteHistory = (history) => {
 };
 
 module.exports = {
-	deleteHistory,
+	deleteProductHistory,
 };

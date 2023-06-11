@@ -1,6 +1,6 @@
-const { History } = require("../../database");
-const createHistory = (product, user) => {
-	return History.create({
+const { ProductHistory } = require("../../database");
+const createProductHistory = (product, user) => {
+	return ProductHistory.create({
 		UserId: user.id,
 		ProductId: product.id,
 	}).catch((err) => {
@@ -12,5 +12,5 @@ const createHistory = (product, user) => {
 };
 
 module.exports = {
-	createHistory,
+	createProductHistory,
 };

@@ -6,5 +6,8 @@
         "test": "jest",
         "start": "node server/index.js",
         "build": "cd server && npm install && cd ../ && cd client && npm install && npm run build"
+    },
+    "devDependencies": {
+        "jest": "^29.5.0"
     }
 }

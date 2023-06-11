@@ -1,8 +1,8 @@
-const { History } = require("../../database");
+const { ProductHistory } = require("../../database");
 const { validateDate, validateId } = require("./validations");
 const { Op } = require("sequelize");
 
-const getHistoryById = (historyId) => {
+const getProductHistoryById = (historyId) => {
 	try {
 		validateId(historyId);
 	} catch (error) {
@@ -11,7 +11,7 @@ const getHistoryById = (historyId) => {
 			message: error.message,
 		};
 	}
-	return History.findByPk(historyId).catch((err) => {
+	return ProductHistory.findByPk(historyId).catch((err) => {
 		return {
 			error: true,
 			message: "Error retrieving history by ID: " + err.message,
@@ -19,7 +19,7 @@ const getHistoryById = (historyId) => {
 	});
 };
 
-const getHistoriesByDate = (user, date) => {
+const getProductHistoriesByDate = (user, date) => {
 	try {
 		validateDate(date);
 	} catch (error) {
@@ -37,7 +37,7 @@ const getHistoriesByDate = (user, date) => {
 	).toISOString(); // Add 24 hours to include the whole day
 
 	return user
-		.getHistories({
+		.getProductHistories({
 			where: {
 				date: {
 					[Op.between]: [startDate, endDate],
@@ -52,7 +52,7 @@ const getHistoriesByDate = (user, date) => {
 		});
 };
 
-const getHistoriesByDateRange = (user, startDate, endDate) => {
+const getProductHistoriesByDateRange = (user, startDate, endDate) => {
 	try {
 		validateDate(startDate);
 		validateDate(endDate);
@@ -63,7 +63,7 @@ const getHistoriesByDateRange = (user, startDate, endDate) => {
 		};
 	}
 	return user
-		.getHistories({
+		.getProductHistories({
 			where: {
 				date: {
 					[Op.between]: [
@@ -84,7 +84,7 @@ const getHistoriesByDateRange = (user, startDate, endDate) => {
 		});
 };
 
-const getHistoriesByUser = (user) => {
+const getProductHistoriesByUser = (user) => {
 	return user
 		.getHistories({
 			order: ["date", "DESC"],
@@ -97,8 +97,8 @@ const getHistoriesByUser = (user) => {
 		});
 };
 
-const getAllHistories = () => {
-	return History.findAll().catch((err) => {
+const getAllProductHistories = () => {
+	return ProductHistory.findAll().catch((err) => {
 		return {
 			error: true,
 			message: "Error retrieving histories: " + err.message,
@@ -107,9 +107,9 @@ const getAllHistories = () => {
 };
 
 module.exports = {
-	getHistoriesByUser,
-	getAllHistories,
-	getHistoriesByDate,
-	getHistoriesByDateRange,
-	getHistoryById,
+	getProductHistoriesByUser,
+	getAllProductHistories,
+	getProductHistoriesByDate,
+	getProductHistoriesByDateRange,
+	getProductHistoryById,
 };

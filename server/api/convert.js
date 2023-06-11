@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User, History, Product } = require("../database");
+const { User, ProductHistory, Product } = require("../database");
 
 const transferLogsToHistory = async (userId, logs) => {
 	if (!logs || logs.length === 0) return;
@@ -29,6 +29,6 @@ const transferLogsToHistory = async (userId, logs) => {
 			}
 		}
 	}
-	await History.bulkCreate(historyData);
+	await ProductHistory.bulkCreate(historyData);
 };
 module.exports = { transferLogsToHistory };

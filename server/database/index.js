@@ -2,7 +2,7 @@ const { Sequelize, Model } = require("sequelize");
 const { LogsConfiguration } = require("./logs");
 const { UserConfiguration } = require("./user");
 const { ProductConfiguration } = require("./product");
-const { HistoryConfiguration } = require("./history");
+const { ProductHistoryConfiguration } = require("./productHistory");
 const { ActivityConfiguration } = require("./activity");
 const { ActivityHistoryConfiguration } = require("./activityHistory");
 
@@ -36,22 +36,22 @@ Product.init(ProductConfiguration, {
 	sequelize,
 });
 
-class History extends Model {}
-History.init(HistoryConfiguration, {
+class ProductHistory extends Model {}
+ProductHistory.init(ProductHistoryConfiguration, {
 	sequelize,
 });
 
 User.belongsToMany(Product, {
-	through: { model: History, unique: false },
+	through: { model: ProductHistory, unique: false },
 });
 Product.belongsToMany(User, {
-	through: { model: History, unique: false },
+	through: { model: ProductHistory, unique: false },
 });
 
-User.hasMany(History);
-History.belongsTo(User);
-Product.hasMany(History);
-History.belongsTo(Product);
+User.hasMany(ProductHistory);
+ProductHistory.belongsTo(User);
+Product.hasMany(ProductHistory);
+ProductHistory.belongsTo(Product);
 
 class Activity extends Model {}
 Activity.init(ActivityConfiguration, {
@@ -92,7 +92,7 @@ module.exports = {
 	Logs,
 	User,
 	Product,
-	History,
+	ProductHistory,
 	Activity,
 	ActivityHistory,
 };

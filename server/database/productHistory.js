@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const HistoryConfiguration = {
+const ProductHistoryConfiguration = {
 	// Model attributes are defined here
 	id: {
 		type: DataTypes.INTEGER,
@@ -14,4 +14,4 @@ const HistoryConfiguration = {
 		defaultValue: DataTypes.NOW,
 	},
 };
-module.exports = { HistoryConfiguration };
+module.exports = { ProductHistoryConfiguration };
