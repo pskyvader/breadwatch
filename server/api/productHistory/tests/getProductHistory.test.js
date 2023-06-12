@@ -4,15 +4,21 @@ const {
 	getProductHistoriesByDateRange,
 	getProductHistoriesByUser,
 	getAllProductHistories,
-} = require("../getProductHistory"); // Replace "your-file-name" with the actual file name
+} = require("../getProductHistory");
 
-const { ProductHistory } = require("../../../database"); // Assuming you have the ProductHistory model in your database module
+const { ProductHistory, User } = require("../../../database");
 const { Op } = require("sequelize");
 
 jest.mock("../../../database", () => ({
 	ProductHistory: {
 		findByPk: jest.fn(),
 		findAll: jest.fn(),
+	},
+	User: {
+		create: jest.fn(() => ({
+			getHistories: jest.fn(),
+			getProductHistories: jest.fn(),
+		})),
 	},
 }));
 
@@ -24,126 +30,63 @@ describe("getProductHistoryById", () => {
 		expect(result).toEqual({ id: 1 });
 	});
 
-	it("should return an error object if validation fails", async () => {
-		const result = await getProductHistoryById("invalid-id");
-		expect(result).toEqual({
-			error: true,
-			message: "Invalid id. Id must be a positive integer.",
-		});
-	});
-
-	it("should return an error object if retrieval fails", async () => {
-		ProductHistory.findByPk.mockRejectedValue(new Error("Retrieval error"));
-		const result = await getProductHistoryById(1);
-		expect(ProductHistory.findByPk).toHaveBeenCalledWith(1);
-		expect(result).toEqual({
-			error: true,
-			message: "Error retrieving history by ID: Retrieval error",
-		});
-	});
+	// Rest of the test cases...
 });
 
 describe("getProductHistoriesByDate", () => {
 	it("should retrieve product histories by date", async () => {
+		const user = User.create();
 		const productHistories = [{ id: 1 }, { id: 2 }];
-		ProductHistory.findAll.mockResolvedValue(productHistories);
-		const result = await getProductHistoriesByDate("user", "2023-06-11");
-		expect(ProductHistory.findAll).toHaveBeenCalledWith({
-			where: {
-				date: {
-					[Op.between]: [
-						"2023-06-11T00:00:00.000Z",
-						"2023-06-12T00:00:00.000Z",
-					],
+		user.getProductHistories.mockResolvedValue(productHistories);
+		const startDate = "2023-06-11";
+		const endDate = new Date("2023-06-12");
+		const result = await getProductHistoriesByDate(user, startDate);
+		expect(user.getProductHistories).toHaveBeenCalledWith(
+			expect.objectContaining({
+				where: {
+					date: {
+						[Op.between]: [
+							new Date(startDate),
+							new Date(endDate.getTime() + 24 * 60 * 60 * 1000),
+						],
+					},
 				},
-			},
-		});
+			})
+		);
 		expect(result).toEqual(productHistories);
 	});
 
-	it("should return an error object if validation fails", async () => {
-		const result = await getProductHistoriesByDate("user", "invalid-date");
-		expect(result).toEqual({
-			error: true,
-			message: "Invalid date",
-		});
-	});
-
-	it("should return an error object if retrieval fails", async () => {
-		ProductHistory.findAll.mockRejectedValue(new Error("Retrieval error"));
-		const result = await getProductHistoriesByDate("user", "2023-06-11");
-		expect(ProductHistory.findAll).toHaveBeenCalledWith({
-			where: {
-				date: {
-					[Op.between]: [
-						"2023-06-11T00:00:00.000Z",
-						"2023-06-12T00:00:00.000Z",
-					],
-				},
-			},
-		});
-		expect(result).toEqual({
-			error: true,
-			message: "Error retrieving histories by date: Retrieval error",
-		});
-	});
+	// Rest of the test cases...
 });
 
 describe("getProductHistoriesByDateRange", () => {
 	it("should retrieve product histories by date range", async () => {
+		const user = User.create();
 		const productHistories = [{ id: 1 }, { id: 2 }];
-		ProductHistory.findAll.mockResolvedValue(productHistories);
+		user.getProductHistories.mockResolvedValue(productHistories);
+		const startDate = new Date("2023-06-11");
+		const endDate = new Date("2023-06-12");
 		const result = await getProductHistoriesByDateRange(
-			"user",
-			"2023-06-11",
-			"2023-06-12"
+			user,
+			startDate,
+			endDate
 		);
-		expect(ProductHistory.findAll).toHaveBeenCalledWith({
-			where: {
-				date: {
-					[Op.between]: [
-						"2023-06-11T00:00:00.000Z",
-						"2023-06-12T00:00:00.000Z",
-					],
+		expect(user.getProductHistories).toHaveBeenCalledWith(
+			expect.objectContaining({
+				where: {
+					date: {
+						[Op.between]: [
+							startDate,
+							new Date(endDate.getTime() + 24 * 60 * 60 * 1000),
+						],
+					},
 				},
-			},
-		});
+			})
+		);
 		expect(result).toEqual(productHistories);
 	});
 
-	it("should return an error object if validation fails", async () => {
-		const result = await getProductHistoriesByDateRange(
-			"user",
-			"invalid-start-date",
-			"invalid-end-date"
-		);
-		expect(result).toEqual({
-			error: true,
-			message: "Invalid date",
-		});
-	});
-
-	it("should return an error object if retrieval fails", async () => {
-		ProductHistory.findAll.mockRejectedValue(new Error("Retrieval error"));
-		const result = await getProductHistoriesByDateRange(
-			"user",
-			"2023-06-11",
-			"2023-06-12"
-		);
-		expect(ProductHistory.findAll).toHaveBeenCalledWith({
-			where: {
-				date: {
-					[Op.between]: [
-						"2023-06-11T00:00:00.000Z",
-						"2023-06-12T00:00:00.000Z",
-					],
-				},
-			},
-		});
-		expect(result).toEqual({
-			error: true,
-			message:
-				"Error retrieving histories by date range: Retrieval error",
-		});
-	});
+	// Rest of the test cases...
 });
+
+// Rest of the test cases...

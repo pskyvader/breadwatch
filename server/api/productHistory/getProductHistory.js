@@ -31,10 +31,8 @@ const getProductHistoriesByDate = (user, date) => {
 	const formattedDate = new Date(date);
 	formattedDate.setUTCHours(0, 0, 0, 0); // Set the time to start of day (midnight)
 
-	const startDate = formattedDate.toISOString();
-	const endDate = new Date(
-		formattedDate.getTime() + 24 * 60 * 60 * 1000
-	).toISOString(); // Add 24 hours to include the whole day
+	const startDate = formattedDate;
+	const endDate = new Date(formattedDate.getTime() + 24 * 60 * 60 * 1000);
 
 	return user
 		.getProductHistories({
