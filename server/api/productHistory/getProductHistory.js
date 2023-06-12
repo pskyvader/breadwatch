@@ -1,5 +1,9 @@
 const { ProductHistory } = require("../../database");
-const { validateDate, validateId } = require("./validations");
+const {
+	validateDate,
+	validateDateRange,
+	validateId,
+} = require("./validations");
 const { Op } = require("sequelize");
 
 const getProductHistoryById = (historyId) => {
@@ -11,12 +15,22 @@ const getProductHistoryById = (historyId) => {
 			message: error.message,
 		};
 	}
-	return ProductHistory.findByPk(historyId).catch((err) => {
-		return {
-			error: true,
-			message: "Error retrieving history by ID: " + err.message,
-		};
-	});
+	return ProductHistory.findByPk(historyId)
+		.catch((err) => {
+			return {
+				error: true,
+				message: "Error retrieving history by ID: " + err.message,
+			};
+		})
+		.then((result) => {
+			if (result == null) {
+				return {
+					error: true,
+					message: "Product history not found",
+				};
+			}
+			return result;
+		});
 };
 
 const getProductHistoriesByDate = (user, date) => {
@@ -28,7 +42,7 @@ const getProductHistoriesByDate = (user, date) => {
 			message: error.message,
 		};
 	}
-	const formattedDate = new Date(date);
+	const formattedDate = date;
 	formattedDate.setUTCHours(0, 0, 0, 0); // Set the time to start of day (midnight)
 
 	const startDate = formattedDate;
@@ -54,6 +68,7 @@ const getProductHistoriesByDateRange = (user, startDate, endDate) => {
 	try {
 		validateDate(startDate);
 		validateDate(endDate);
+		validateDateRange(startDate, endDate);
 	} catch (error) {
 		return {
 			error: true,
@@ -66,9 +81,7 @@ const getProductHistoriesByDateRange = (user, startDate, endDate) => {
 				date: {
 					[Op.between]: [
 						startDate,
-						new Date(
-							endDate.getTime() + 24 * 60 * 60 * 1000
-						).toISOString(),
+						new Date(endDate.getTime() + 24 * 60 * 60 * 1000),
 					],
 				},
 			},
@@ -90,7 +103,7 @@ const getProductHistoriesByUser = (user) => {
 		.catch((err) => {
 			return {
 				error: true,
-				message: "Error retrieving histories by date: " + err.message,
+				message: "Error retrieving histories by user: " + err.message,
 			};
 		});
 };
@@ -99,7 +112,7 @@ const getAllProductHistories = () => {
 	return ProductHistory.findAll().catch((err) => {
 		return {
 			error: true,
-			message: "Error retrieving histories: " + err.message,
+			message: "Error retrieving all histories: " + err.message,
 		};
 	});
 };
