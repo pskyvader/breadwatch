@@ -1,57 +1,64 @@
 const { createProductHistory } = require("../createProductHistory");
-
-const { Product, User, ProductHistory } = require("../../../database");
+const { ProductHistory } = require("../../../database");
 
 // Mock Product model and functions
 jest.mock("../../../database", () => ({
-	Product: {
-		create: jest.fn(),
-	},
-	User: {
-		create: jest.fn(),
-	},
 	ProductHistory: {
 		create: jest.fn(),
 	},
 }));
 
-describe("createProductHistory function", () => {
-	beforeEach(() => {
+describe("createProductHistory", () => {
+	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it("should create a product history entry", async () => {
-		// Test setup
+		// Mock data
 		const product = { id: 1 };
 		const user = { id: 1 };
+
+		// Mock the create method of ProductHistory model
+		ProductHistory.create.mockResolvedValue({
+			UserId: user.id,
+			ProductId: product.id,
+		});
 
 		// Call the function
 		const result = await createProductHistory(product, user);
 
 		// Assert the result
-		expect(result).not.toHaveProperty("error");
-		expect(result).toHaveProperty("UserId", user.id);
-		expect(result).toHaveProperty("ProductId", product.id);
+		expect(result).toEqual({ UserId: user.id, ProductId: product.id });
+
+		// Verify the create method was called with the correct arguments
+		expect(ProductHistory.create).toHaveBeenCalledWith({
+			UserId: user.id,
+			ProductId: product.id,
+		});
 	});
 
 	it("should return an error object if creation fails", async () => {
-		// Test setup
+		// Mock data
 		const product = { id: 1 };
 		const user = { id: 1 };
 
-		// Simulate creation failure
-		jest.spyOn(ProductHistory, "create").mockRejectedValue(
-			new Error("Creation failed")
-		);
+		// Mock the create method of ProductHistory model to throw an error
+		const errorMessage = "Creation failed";
+		ProductHistory.create.mockRejectedValue(new Error(errorMessage));
 
 		// Call the function
 		const result = await createProductHistory(product, user);
 
 		// Assert the error object
-		expect(result).toHaveProperty("error", true);
-		expect(result).toHaveProperty(
-			"message",
-			"Create history error: Creation failed"
-		);
+		expect(result).toEqual({
+			error: true,
+			message: "Create history error: " + errorMessage,
+		});
+
+		// Verify the create method was called with the correct arguments
+		expect(ProductHistory.create).toHaveBeenCalledWith({
+			UserId: user.id,
+			ProductId: product.id,
+		});
 	});
 });
