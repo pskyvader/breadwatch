@@ -52,7 +52,7 @@ describe("createProductHistory", () => {
 		// Assert the error object
 		expect(result).toEqual({
 			error: true,
-			message: "Create history error: " + errorMessage,
+			message: "Create product history error: " + errorMessage,
 		});
 
 		// Verify the create method was called with the correct arguments

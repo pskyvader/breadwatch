@@ -1,4 +1,4 @@
-const { ProductHistory } = require("../../database");
+const { ActivityHistory } = require("../../database");
 const {
 	validateDate,
 	validateDateRange,
@@ -6,7 +6,7 @@ const {
 } = require("./validations");
 const { Op } = require("sequelize");
 
-const getProductHistoryById = (historyId) => {
+const getActivityHistoryById = (historyId) => {
 	try {
 		validateId(historyId);
 	} catch (error) {
@@ -15,25 +15,25 @@ const getProductHistoryById = (historyId) => {
 			message: error.message,
 		};
 	}
-	return ProductHistory.findByPk(historyId)
+	return ActivityHistory.findByPk(historyId)
 		.catch((err) => {
 			return {
 				error: true,
-				message: "Error retrieving product history by ID: " + err.message,
+				message: "Error retrieving activity history by ID: " + err.message,
 			};
 		})
 		.then((result) => {
 			if (result == null) {
 				return {
 					error: true,
-					message: "Product history not found",
+					message: "Activity history not found",
 				};
 			}
 			return result;
 		});
 };
 
-const getProductHistoriesByDate = (user, date) => {
+const getActivityHistoriesByDate = (user, date) => {
 	try {
 		validateDate(date);
 	} catch (error) {
@@ -49,7 +49,7 @@ const getProductHistoriesByDate = (user, date) => {
 	const endDate = new Date(formattedDate.getTime() + 24 * 60 * 60 * 1000);
 
 	return user
-		.getProductHistories({
+		.getActivityHistories({
 			where: {
 				date: {
 					[Op.between]: [startDate, endDate],
@@ -59,12 +59,12 @@ const getProductHistoriesByDate = (user, date) => {
 		.catch((err) => {
 			return {
 				error: true,
-				message: "Error retrieving product histories by date: " + err.message,
+				message: "Error retrieving activity histories by date: " + err.message,
 			};
 		});
 };
 
-const getProductHistoriesByDateRange = (user, startDate, endDate) => {
+const getActivityHistoriesByDateRange = (user, startDate, endDate) => {
 	try {
 		validateDate(startDate);
 		validateDate(endDate);
@@ -76,7 +76,7 @@ const getProductHistoriesByDateRange = (user, startDate, endDate) => {
 		};
 	}
 	return user
-		.getProductHistories({
+		.getActivityHistories({
 			where: {
 				date: {
 					[Op.between]: [
@@ -90,12 +90,12 @@ const getProductHistoriesByDateRange = (user, startDate, endDate) => {
 			return {
 				error: true,
 				message:
-					"Error retrieving product histories by date range: " + err.message,
+					"Error retrieving activity histories by date range: " + err.message,
 			};
 		});
 };
 
-const getProductHistoriesByUser = (user) => {
+const getActivityHistoriesByUser = (user) => {
 	return user
 		.getHistories({
 			order: ["date", "DESC"],
@@ -103,24 +103,24 @@ const getProductHistoriesByUser = (user) => {
 		.catch((err) => {
 			return {
 				error: true,
-				message: "Error retrieving product histories by user: " + err.message,
+				message: "Error retrieving activity histories by user: " + err.message,
 			};
 		});
 };
 
-const getAllProductHistories = () => {
-	return ProductHistory.findAll().catch((err) => {
+const getAllActivityHistories = () => {
+	return ActivityHistory.findAll().catch((err) => {
 		return {
 			error: true,
-			message: "Error retrieving all product histories: " + err.message,
+			message: "Error retrieving all activity histories: " + err.message,
 		};
 	});
 };
 
 module.exports = {
-	getProductHistoriesByUser,
-	getAllProductHistories,
-	getProductHistoriesByDate,
-	getProductHistoriesByDateRange,
-	getProductHistoryById,
+	getActivityHistoriesByUser,
+	getAllActivityHistories,
+	getActivityHistoriesByDate,
+	getActivityHistoriesByDateRange,
+	getActivityHistoryById,
 };

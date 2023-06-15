@@ -40,7 +40,7 @@ describe("getProductHistoryById", () => {
 		expect(ProductHistory.findByPk).toHaveBeenCalledWith(1);
 		expect(result).toEqual({
 			error: true,
-			message: "Error retrieving history by ID: " + errorMessage,
+			message: "Error retrieving product history by ID: " + errorMessage,
 		});
 	});
 
@@ -110,7 +110,7 @@ describe("getProductHistoriesByDate", () => {
 		expect(user.getProductHistories).toHaveBeenCalled();
 		expect(result).toEqual({
 			error: true,
-			message: "Error retrieving histories by date: " + errorMessage,
+			message: "Error retrieving product histories by date: " + errorMessage,
 		});
 	});
 
@@ -174,7 +174,7 @@ describe("getProductHistoriesByDateRange", () => {
 		expect(result).toEqual({
 			error: true,
 			message:
-				"Error retrieving histories by date range: " + errorMessage,
+				"Error retrieving product histories by date range: " + errorMessage,
 		});
 	});
 
@@ -243,7 +243,7 @@ describe("getProductHistoriesByUser", () => {
 		expect(user.getHistories).toHaveBeenCalled();
 		expect(result).toEqual({
 			error: true,
-			message: "Error retrieving histories by user: " + errorMessage,
+			message: "Error retrieving product histories by user: " + errorMessage,
 		});
 	});
 
@@ -272,7 +272,7 @@ describe("getAllProductHistories", () => {
 		expect(ProductHistory.findAll).toHaveBeenCalled();
 		expect(result).toEqual({
 			error: true,
-			message: "Error retrieving all histories: " + errorMessage,
+			message: "Error retrieving all product histories: " + errorMessage,
 		});
 	});
 

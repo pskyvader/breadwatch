@@ -6,7 +6,7 @@ const createProductHistory = (product, user) => {
 	}).catch((err) => {
 		return {
 			error: true,
-			message: "Create history error: " + err.message,
+			message: "Create product history error: " + err.message,
 		};
 	});
 };

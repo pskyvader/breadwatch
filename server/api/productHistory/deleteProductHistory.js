@@ -2,7 +2,7 @@ const deleteProductHistory = (productHistory) => {
 	return productHistory.destroy().catch((err) => {
 		return {
 			error: true,
-			message: "Delete productHistory error: " + err.message,
+			message: "Delete product history error: " + err.message,
 		};
 	});
 };

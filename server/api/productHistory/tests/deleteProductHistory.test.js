@@ -42,7 +42,7 @@ describe("deleteProductHistory", () => {
 		// Check if the result contains an error
 		expect(result).toEqual({
 			error: true,
-			message: "Delete productHistory error: Deletion error",
+			message: "Delete product history error: Deletion error",
 		});
 	});
 });
